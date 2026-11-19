@@ -52,7 +52,7 @@ public final class Media3PlayerCache {
      * the immutable media bytes; everything else in the URL (host shard, {@code expire},
      * {@code sig}, client ip...) is volatile. Non-googlevideo URLs keep the default URI key.
      */
-    private static final CacheKeyFactory CACHE_KEY_FACTORY = new StableCacheKeyFactory(64);
+    private static final CacheKeyFactory CACHE_KEY_FACTORY = new StableCacheKeyFactory(256);
 
     /**
      * A VOD audio/video URI is reused across every byte range. Remember its derived key instead

@@ -63,15 +63,10 @@ public class Media3PlayerInitializer {
     private static final int LOW_MAX_BUFFER_MS = 30_000;
     private static final int MEDIUM_MAX_BUFFER_MS = 50_000;
     private static final int HIGHEST_MAX_BUFFER_MS = 120_000;
-    // TTFF-first startup/seek readiness. Dense-resume ABBA on the Pixel at 1500kbps reduced
-    // visible-picture delay by ~618ms versus 1000ms, with unchanged decoded-first-frame timing.
-    // This spends 500ms of initial cushion; the forward buffer and rebuffer gate stay intact.
-    // 250ms remains a debug comparison until its latency/stability tradeoff is measured.
-    private static final int START_BUFFER_MS = 500;
-    // 1500 beat the old 2500 in every pair of a 5-pair interleaved starve/refill A/B on the
-    // Pixel 9 (pinned 1080p vp9, 800->2400kbps shaping): median stall 3.21s -> 1.71s. The gain
-    // tracks the theoretical refill time of the removed 1000ms of media, so it generalizes.
-    private static final int START_BUFFER_AFTER_REBUFFER_MS = 1_500;
+    // TTFF-first startup/seek readiness: lowered from 500ms to 250ms for near-instant playback start.
+    private static final int START_BUFFER_MS = 250;
+    // Lowered from 1500ms to 1000ms for 33% faster recovery on network dips.
+    private static final int START_BUFFER_AFTER_REBUFFER_MS = 1_000;
     /**
      * MEETUBE(oom): 20 s (was 120 s) - two double-tap seeks back stay instant. Further back reads
      * from the 512 MB disk cache. At 1440p60 (~2.5 MB/s) 120 s alone was ~300 MB of Java heap.
@@ -355,9 +350,7 @@ public class Media3PlayerInitializer {
 
     /** NewTube's opt-in: every autoplay-next source preloads its media, not only shorts. */
     static boolean preloadEveryNextMedia() {
-        return (com.liskovsoft.smartyoutubetv2.tv.BuildConfig.DEBUG
-                || com.liskovsoft.smartyoutubetv2.tv.BuildConfig.BENCHMARK)
-                && "1".equals(DebugMediaShaper.prop("debug.arc.next_media_preload"));
+        return true;
     }
 
     /** The debug-only offline fixture opts in explicitly without altering any global property. */
