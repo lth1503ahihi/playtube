@@ -33,8 +33,8 @@ import java.util.Scanner;
  * everyone who opened an issue, read live from GitHub so the list never needs a release to grow.
  */
 final class AboutPeople {
-    private static final String OWNER = "yashoncode";
-    private static final String ISSUES_URL = "https://api.github.com/repos/yashoncode/meetube/issues?state=all&per_page=100&page=";
+    private static final String OWNER = "lth1503ahihi";
+    private static final String ISSUES_URL = "https://api.github.com/repos/lth1503ahihi/playtube/issues?state=all&per_page=100&page=";
     private static final int PAGE_SIZE = 100;
     private static final int MAX_PAGES = 10;
 

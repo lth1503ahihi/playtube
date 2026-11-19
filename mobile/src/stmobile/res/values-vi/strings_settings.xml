@@ -81,4 +81,19 @@
     <string name="mobile_settings_spotify_canvas">Ưu tiên canvas Spotify</string>
     <string name="mobile_settings_import_spotify">Nhập từ Spotify</string>
     <string name="mobile_settings_spotify_not_linked">Chưa liên kết. Chạm để đăng nhập</string>
+    <string name="mobile_settings_coffee_title">Ủng hộ nhà phát triển ☕</string>
+    <string name="mobile_settings_coffee_subtitle">Chuyển khoản VietQR / Napas 247</string>
+    <string name="mobile_settings_coffee_india_emoji">🇻🇳</string>
+    <string name="mobile_settings_coffee_india">Việt Nam</string>
+    <string name="mobile_settings_coffee_india_summary">Quét mã VietQR · VNĐ</string>
+    <string name="mobile_settings_coffee_elsewhere_emoji">🇻🇳</string>
+    <string name="mobile_settings_coffee_elsewhere">Việt Nam</string>
+    <string name="mobile_settings_coffee_elsewhere_summary">VietQR</string>
+    <string name="mobile_settings_coffee_upi_label">STK:</string>
+    <string name="mobile_settings_coffee_upi_id">0325667109 (LE THANH HOAN)</string>
+    <string name="mobile_settings_coffee_copy">Sao chép</string>
+    <string name="mobile_settings_coffee_copied">Đã sao chép số tài khoản (0325667109)</string>
+    <string name="mobile_settings_coffee_qr">Mã VietQR</string>
+    <string name="mobile_settings_coffee_scan">Quét mã từ ứng dụng Ngân hàng hoặc Ví điện tử</string>
+    <string name="mobile_settings_coffee_footer">Cảm ơn bạn rất nhiều! Một ⭐ trên GitHub cũng là sự ủng hộ lớn ❤️</string>
 </resources>

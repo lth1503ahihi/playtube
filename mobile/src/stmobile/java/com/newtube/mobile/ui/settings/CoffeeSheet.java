@@ -29,21 +29,19 @@ final class CoffeeSheet {
         BottomSheetDialog sheet = com.newtube.mobile.ui.common.Haptics.watch(new BottomSheetDialog(context)); // MEETUBE(glass): frosted
         Context themed = sheet.getContext();
         ViewGroup root = (ViewGroup) LayoutInflater.from(themed).inflate(R.layout.sheet_mobile_coffee, null);
-        root.findViewById(R.id.coffee_india).setOnClickListener(v -> {
-            TransitionManager.beginDelayedTransition(root);
-            v.setSelected(true);
+        View indiaBtn = root.findViewById(R.id.coffee_india);
+        if (indiaBtn != null) {
             GradientDrawable selected = new GradientDrawable();
             float dp = themed.getResources().getDisplayMetrics().density;
             selected.setCornerRadius(22 * dp);
             selected.setColor(ContextCompat.getColor(themed, R.color.meetube_glass_selected));
             selected.setStroke(Math.round(2 * dp), ContextCompat.getColor(themed, R.color.meetube_accent));
-            v.setBackground(selected);
-            root.findViewById(R.id.coffee_india_panel).setVisibility(View.VISIBLE);
-        });
-        root.findViewById(R.id.coffee_elsewhere).setOnClickListener(v -> {
-            Utils.openLinkExt(context, context.getString(R.string.mobile_settings_coffee_url));
-            sheet.dismiss();
-        });
+            indiaBtn.setBackground(selected);
+        }
+        View elsewhere = root.findViewById(R.id.coffee_elsewhere);
+        if (elsewhere != null) {
+            elsewhere.setVisibility(View.GONE);
+        }
         root.findViewById(R.id.coffee_copy).setOnClickListener(v -> copy(themed, R.string.mobile_settings_coffee_copied));
         View qr = root.findViewById(R.id.coffee_qr);
         qr.setOutlineProvider(new ViewOutlineProvider() {
@@ -66,7 +64,7 @@ final class CoffeeSheet {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
             clipboard.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.mobile_settings_coffee_upi_label),
-                    context.getString(R.string.mobile_settings_coffee_upi_id)));
+                    "0325667109"));
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         }
     }

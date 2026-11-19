@@ -51,11 +51,9 @@
 
                 <LinearLayout
                     android:id="@+id/coffee_india"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
-                    android:minHeight="120dp"
+                    android:minHeight="100dp"
                     android:background="@drawable/bg_glass_card"
                     android:clickable="true"
                     android:focusable="true"
@@ -90,39 +88,8 @@
                 <LinearLayout
                     android:id="@+id/coffee_elsewhere"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    android:minHeight="120dp"
-                    android:background="@drawable/bg_glass_card"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:importantForAccessibility="no"
-                        android:text="@string/mobile_settings_coffee_elsewhere_emoji"
-                        android:textSize="32sp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/mobile_settings_coffee_elsewhere"
-                        android:textColor="@color/mobile_color_on_surface"
-                        android:textSize="17sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center"
-                        android:text="@string/mobile_settings_coffee_elsewhere_summary"
-                        android:textColor="@color/mobile_color_on_surface_secondary"
-                        android:textSize="12sp" />
+                    android:layout_height="0dp"
+                    android:visibility="gone">
                 </LinearLayout>
             </LinearLayout>
 
@@ -133,7 +100,7 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -170,8 +137,8 @@
 
                 <ImageView
                     android:id="@+id/coffee_qr"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
+                    android:layout_width="220dp"
+                    android:layout_height="270dp"
                     android:layout_marginTop="8dp"
                     android:background="@color/mobile_color_qr_bg"
                     android:contentDescription="@string/mobile_settings_coffee_qr"

@@ -108,4 +108,14 @@
     <string name="mobile_you_history">Lịch sử</string>
     <string name="mobile_about_title">Giới thiệu %1$s</string>
     <string name="mobile_about_app">Giới thiệu %1$s</string>
+    <string name="mobile_about_repo_url">https://github.com/lth1503ahihi/playtube</string>
+    <string name="mobile_about_dev_name">LE THANH HOAN</string>
+    <string name="mobile_about_dev_handle">github.com/lth1503ahihi</string>
+    <string name="mobile_about_dev_url">https://github.com/lth1503ahihi</string>
+    <string name="mobile_about_creator">Nhà phát triển</string>
+    <string name="mobile_about_star_short">Star</string>
+    <string name="mobile_about_share_short">Chia sẻ</string>
+    <string name="mobile_about_log_short">Gửi nhật ký</string>
+    <string name="mobile_about_coffee_note"><![CDATA[<font color="#FF5F56">●</font> <font color="#FFBD2E">●</font> <font color="#27C93F">●</font><br><br><font color="#4ADE80">$</font> playtube --thank-you<br><font color="#E6EDF3">&#160;&#160;ads: 0 | sponsors: skipped</font><br><font color="#8B949E">// built with love and passion<br>// ủng hộ dev ly cà phê :)</font>]]></string>
+    <string name="mobile_about_coffee_cta">Ủng hộ cà phê ☕</string>
 </resources>
