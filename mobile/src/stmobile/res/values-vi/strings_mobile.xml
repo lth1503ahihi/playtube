@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name" translatable="false">PlayTube</string>
+    <string name="app_name">PlayTube</string>
     <string name="mobile_player_back">Quay lại</string>
     <string name="mobile_player_minimize">Thu nhỏ</string>
     <string name="mobile_player_audio_only">Chỉ nghe âm thanh</string>
@@ -95,4 +95,18 @@
     <string name="mobile_equalizer_reset">Đặt lại</string>
     <string name="mobile_equalizer_bass_boost">Tăng âm trầm (Bass)</string>
     <string name="mobile_equalizer_virtualizer">Hiệu ứng vòm (3D)</string>
+    <string name="mobile_search_button">Tìm kiếm</string>
+    <string name="mobile_nav_home">Trang chủ</string>
+    <string name="mobile_nav_shorts">Shorts</string>
+    <string name="mobile_nav_downloads">Tải xuống</string>
+    <string name="mobile_you_watch_later">Xem sau</string>
+    <string name="mobile_you_liked_videos">Video đã thích</string>
+    <string name="mobile_you_your_videos">Video của bạn</string>
+    <string name="mobile_you_playlists">Danh sách phát</string>
+    <string name="mobile_you_subscriptions">Kênh đăng ký</string>
+    <string name="mobile_you_downloads">Tải xuống</string>
+    <string name="mobile_you_history">Lịch sử</string>
+    <string name="mobile_about_title">Giới thiệu %1$s</string>
+    <string name="mobile_about_app">Giới thiệu %1$s</string>
+    <string name="mobile_settings_about">Thông tin ứng dụng</string>
 </resources>

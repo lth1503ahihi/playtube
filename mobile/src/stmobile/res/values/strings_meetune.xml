@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="meetune_name" translatable="false">MeeTune</string>
-    <string name="meetune_try">Try MeeTune</string>
+    <string name="meetune_name" translatable="false">PlayTune</string>
+    <string name="meetune_try">Try PlayTune</string>
     <string name="meetune_home">Home</string>
     <string name="meetune_explore">Explore</string>
     <string name="meetune_library">Library</string>
     <string name="meetune_search">Search</string>
     <string name="meetune_search_hint">Songs, albums, artists</string>
     <string name="meetune_back">Back</string>
-    <string name="meetune_settings">MeeTune settings</string>
+    <string name="meetune_settings">PlayTune settings</string>
     <string name="meetune_account">Account and settings</string>
     <string name="meetune_add_account">Add account</string>
-    <string name="meetune_to_meetube">Back to MeeTube</string>
+    <string name="meetune_to_meetube">Back to PlayTube</string>
     <string name="meetune_show_all">Show all</string>
     <string name="meetune_more">More</string>
     <string name="meetune_play">Play</string>
@@ -41,15 +41,15 @@
     <string name="meetune_filter_playlists">Playlists</string>
     <string name="meetune_set_customize">Customization</string>
     <string name="meetune_set_customize_summary">The You page heart, the name beside the logo and Search\'s glow</string>
-    <string name="meetune_set_brand_name">MeeTune name beside the logo</string>
+    <string name="meetune_set_brand_name">PlayTune name beside the logo</string>
     <string name="meetune_set_brand_name_summary">Off, Home\'s corner shows the heart alone</string>
-    <string name="meetune_link_meetube">MeeTube →</string>
-    <string name="meetune_link_meetune">MeeTune →</string>
-    <string name="meetune_home_hint">Tap the icon to switch to MeeTune</string>
-    <string name="meetune_meetube_hint">Tap the icon to switch to MeeTube</string>
+    <string name="meetune_link_meetube">PlayTube →</string>
+    <string name="meetune_link_meetune">PlayTune →</string>
+    <string name="meetune_home_hint">Tap the icon to switch to PlayTune</string>
+    <string name="meetune_meetube_hint">Tap the icon to switch to PlayTube</string>
     <string name="meetune_cached">Cached songs</string>
     <string name="meetune_cached_summary">Play with no network</string>
-    <string name="meetune_storage_songs">MeeTune songs (in cache)</string>
+    <string name="meetune_storage_songs">PlayTune songs (in cache)</string>
     <plurals name="meetune_storage_songs_value">
         <item quantity="one">%1$s · %2$d song</item>
         <item quantity="other">%1$s · %2$d songs</item>
@@ -71,11 +71,11 @@
     <string name="meetune_unsave">Remove from library</string>
     <string name="meetune_save_sign_in">Sign in to save music to your library</string>
     <string name="meetune_save_failed">Couldn\'t change your library</string>
-    <!-- MeeTune's Equalizer -->
-    <string name="meetune_eq">MeeTune Equalizer</string>
+    <!-- PlayTune's Equalizer -->
+    <string name="meetune_eq">PlayTune Equalizer</string>
     <string name="meetune_eq_sound">Sound</string>
     <string name="meetune_eq_off">Off</string>
-    <string name="meetune_eq_note">Shapes MeeTune\'s songs inside the app, before they reach the phone. MeeTube videos keep their own sound.</string>
+    <string name="meetune_eq_note">Shapes PlayTune\'s songs inside the app, before they reach the phone. PlayTube videos keep their own sound.</string>
     <string name="meetune_eq_dynamic">Dynamic</string>
     <string name="meetune_eq_manual">Manual</string>
     <string name="meetune_eq_tone">Tone</string>
@@ -112,8 +112,8 @@
     <string name="meetune_eq_system">System equalizer</string>
     <string name="meetune_eq_system_summary">Your phone\'s own panel</string>
     <string name="meetune_eq_system_none">This phone has no equalizer panel</string>
-    <string name="meetune_eq_system_note">Runs after MeeTune\'s, on the phone\'s sound. Using both applies both.</string>
-    <!-- The song menu (a song's three dots): YouTube Music's, on MeeTube's frosted glass. -->
+    <string name="meetune_eq_system_note">Runs after PlayTune\'s, on the phone\'s sound. Using both applies both.</string>
+    <!-- The song menu (a song's three dots): YouTube Music's, on PlayTube's frosted glass. -->
     <string name="meetune_dislike">Dislike</string>
     <string name="meetune_liked_done">Added to your liked songs</string>
     <string name="meetune_unliked">Removed from your liked songs</string>
@@ -151,10 +151,10 @@
     <string name="meetune_head_tracking_summary_none">Needs the Spatial audio of this phone: put on earbuds that support it and turn it on in their Bluetooth settings</string>
     <string name="meetune_crossfade">Crossfade</string>
     <string name="meetune_volume">Volume</string>
-    <string name="meetune_volume_note">Songs only; MeeTube keeps its own Player volume. Over 100% boosts quiet songs and quiet phones. Very high levels can distort the sound or damage speakers</string>
+    <string name="meetune_volume_note">Songs only; PlayTube keeps its own Player volume. Over 100% boosts quiet songs and quiet phones. Very high levels can distort the sound or damage speakers</string>
     <string name="meetune_crossfade_off">Off</string>
     <string name="meetune_crossfade_seconds">%1$d s</string>
-    <string name="meetune_automix">MeeTuneMix</string>
+    <string name="meetune_automix">PlayTuneMix</string>
     <string name="meetune_automix_summary">Crossfades like a DJ: the next song comes in on the beat, its tempo matched to the playing one, then eases back to its own. Uses the Crossfade length, or 8 s when that is Off</string>
     <string name="meetune_crossfade_note">The end of a song fades into the next one. Songs from Autoplay, a queue or Repeat; not when playback stops after the song</string>
     <string name="meetune_bit_perfect">Bit-perfect USB DAC</string>
@@ -256,7 +256,7 @@
     <string name="meetune_exported">Library exported</string>
     <string name="meetune_export_failed">Could not write the file</string>
     <string name="meetune_imported">%1$d playlists and %2$d saved pages imported</string>
-    <string name="meetune_import_failed">That file is not a MeeTune library</string>
+    <string name="meetune_import_failed">That file is not a PlayTune library</string>
     <string name="meetune_spotify_import">Import from Spotify</string>
     <string name="meetune_spotify_import_summary">Copy your Spotify playlists here, matched to YouTube Music songs. Signs in to Spotify first</string>
     <string name="meetune_spotify_loading">Reading your Spotify playlists</string>
@@ -276,6 +276,6 @@
     <string name="meetune_spotify">Spotify</string>
     <string name="meetune_spotify_linked">Linked. Tap to sign out</string>
     <string name="meetune_spotify_not_linked">Not linked. Tap to sign in</string>
-    <string name="meetune_addons_note">Add-ons link MeeTune to other services. They are unofficial, read only, and may stop working when those services change.</string>
+    <string name="meetune_addons_note">Add-ons link PlayTune to other services. They are unofficial, read only, and may stop working when those services change.</string>
     <string name="meetune_hints">What this does</string>
 </resources>

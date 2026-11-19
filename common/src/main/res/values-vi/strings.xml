@@ -4,6 +4,7 @@
   <string name="title_search">Tìm kiếm</string>
   <string name="header_subscriptions">Kênh đăng ký</string>
   <string name="header_history">Lịch sử</string>
+  <string name="header_downloads">Tải xuống</string>
   <string name="header_music">Âm nhạc</string>
   <string name="header_news">Tin tức</string>
   <string name="header_gaming">Trò chơi</string>
@@ -642,6 +643,7 @@
   <string name="pinned_channel_rows">Hiển thị kênh được ghim dưới dạng hàng</string>
   <string name="pitch_effect">Hiệu ứng cao độ</string>
   <string name="header_sports">Thể thao</string>
+  <string name="header_live">Trực tiếp</string>
   <string name="crowdsoursed_titles">Nguồn tiêu đề từ người xem</string>
   <string name="crowdsourced_thumbnails">Nguồn hình thu nhỏ từ người xem</string>
   <string name="dearrow_not_submitted_thumbs">Nguồn hình thu nhỏ (nếu không có hình ảnh được gửi qua DeArrow)</string>
