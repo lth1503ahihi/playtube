@@ -85,9 +85,9 @@
     <string name="mobile_player_duration" translatable="false">\u0020/%1$s</string>
     <string name="mobile_player_chapter_title" translatable="false">·\u0020%1$s</string>
     <string name="mobile_player_hold_speed" translatable="false">2x</string>
-    <string name="mobile_shorts_rest_title">Con không thắng sao con trai??</string>
-    <string name="mobile_shorts_rest_message">30 phút ngắn. Hãy nghỉ ngơi một chút :)</string>
-    <string name="mobile_shorts_rest_ok">Được rồi, được rồi</string>
+    <string name="mobile_shorts_rest_title">Đang lướt vui vẻ chứ??</string>
+    <string name="mobile_shorts_rest_message">Đã xem Shorts 30 phút rồi. Hãy nghỉ ngơi một chút :)</string>
+    <string name="mobile_shorts_rest_ok">Được rồi</string>
     <string name="mobile_quality_auto_current">Tự động (%1$s)</string>
     <string name="mobile_quality_auto_short">Tự động</string>
     <string name="mobile_menu_repeat">Chế độ lặp lại</string>
@@ -238,7 +238,7 @@
     <string name="mobile_search_filter_type">Loại</string>
     <string name="mobile_search_filter_all">Tất cả</string>
     <string name="mobile_search_filter_videos">Video</string>
-    <string name="mobile_search_filter_shorts">quần short</string>
+    <string name="mobile_search_filter_shorts">Shorts</string>
     <string name="mobile_search_filter_channels">Kênh</string>
     <string name="mobile_search_filter_playlists">Danh sách phát</string>
     <string name="mobile_search_filter_movies">Phim</string>
@@ -640,8 +640,8 @@
     <string name="mobile_focus_snoozed_again">Một lần nữa? Được rồi, 5 cuối cùng. Có lẽ vậy.</string>
     <string name="mobile_focus_custom_title">Hẹn giờ tùy chỉnh</string>
     <string name="mobile_focus_custom_hint">Phút (1 đến 600)</string>
-    <string name="mobile_shorts_clean_on">Các nút ẩn. Nhấn và giữ để đưa chúng trở lại</string>
-    <string name="mobile_shorts_clean_off">Các nút đã trở lại. Nhấn và giữ để ẩn chúng</string>
-    <string name="mobile_shorts_clean_tip">Mẹo: nhấn và giữ phím Ngắn để ẩn các nút của nó</string>
+    <string name="mobile_shorts_clean_on">Đã ẩn các nút. Nhấn và giữ để hiện lại</string>
+    <string name="mobile_shorts_clean_off">Đã hiện lại các nút. Nhấn và giữ để ẩn</string>
+    <string name="mobile_shorts_clean_tip">Mẹo: Nhấn và giữ màn hình Shorts để ẩn các nút điều khiển</string>
     <string name="mobile_player_most_replayed">Được phát lại nhiều nhất</string>
 </resources>

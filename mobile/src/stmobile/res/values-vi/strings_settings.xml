@@ -383,7 +383,7 @@
     <string name="mobile_settings_quality_wifi">Trên Wi-Fi</string>
     <string name="mobile_settings_quality_mobile">Trên dữ liệu di động</string>
     <string name="mobile_settings_quality_same">Tương tự với Wi-Fi</string>
-    <string name="mobile_settings_quality_shorts">quần short</string>
+    <string name="mobile_settings_quality_shorts">Video ngắn (Shorts)</string>
     <string name="mobile_settings_quality_both">Wi-Fi:%1$s· Dữ liệu di động:%2$s</string>
     <string name="mobile_settings_quality_auto">Tự động (lên đến%1$dp)</string>
     <string name="mobile_settings_quality_auto_desc">Khuyến nghị. Kết nối tốt nhất của bạn cho phép</string>
