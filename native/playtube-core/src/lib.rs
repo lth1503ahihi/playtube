@@ -3,6 +3,7 @@ use jni::sys::{jboolean, jfloat, jint, jlong, jstring, JNI_TRUE};
 use jni::JNIEnv;
 use std::f32::consts::PI;
 
+mod dsp;
 mod hrtf;
 
 const TAPS_L_MS: [f32; 4] = [8.3, 14.9, 22.1, 33.7];
@@ -48,6 +49,9 @@ pub struct SpatialEngine {
     room_low: f32,
     wet: f32,
     bass_wet: f32,
+    harmonic_bass: dsp::HarmonicBass,
+    bs2b: dsp::Bs2bFilter,
+    limiter: dsp::FastLimiter,
 }
 
 impl SpatialEngine {
@@ -77,6 +81,10 @@ impl SpatialEngine {
         let mid_ring = vec![0.0f32; 2 * taps_len];
         let side_ring = vec![0.0f32; 2 * taps_len];
 
+        let harmonic_bass = dsp::HarmonicBass::new(rate);
+        let bs2b = dsp::Bs2bFilter::new(rate);
+        let limiter = dsp::FastLimiter::new(rate);
+
         Self {
             rate,
             glide,
@@ -97,6 +105,9 @@ impl SpatialEngine {
             room_low: 0.0,
             wet: 0.0,
             bass_wet: 0.0,
+            harmonic_bass,
+            bs2b,
+            limiter,
         }
     }
 
@@ -111,6 +122,9 @@ impl SpatialEngine {
         self.history.fill(0.0);
         self.ring_pos = 0;
         self.history_pos = 0;
+        self.harmonic_bass.reset();
+        self.bs2b.reset();
+        self.limiter.reset();
     }
 
     pub fn process_frame(&mut self, l: f32, r: f32, goal_amount: f32, goal_bass: f32) -> (f32, f32) {
@@ -149,9 +163,10 @@ impl SpatialEngine {
 
         self.ring_pos = if self.ring_pos + 1 == taps { 0 } else { self.ring_pos + 1 };
 
-        // Cinema bass
+        // Cinema bass + Psychoacoustic harmonic excitation
         self.bass_low = mid + (self.bass_low - mid) * self.low_coef;
         mid += self.bass_low * BASS_GAIN * b;
+        mid = self.harmonic_bass.process(mid, b);
 
         // Room reflections
         self.room_low = mid + (self.room_low - mid) * self.room_coef;
@@ -170,10 +185,14 @@ impl SpatialEngine {
         self.history_pos = if self.history_pos + 1 == h_len { 0 } else { self.history_pos + 1 };
 
         let level = 1.0 / (1.0 + 0.3 * w + 0.3 * b);
-        let out_l = soft((mid + wide + room_l * 0.6 * w) * level);
-        let out_r = soft((mid - wide + room_r * 0.6 * w) * level);
+        let out_l_raw = soft((mid + wide + room_l * 0.6 * w) * level);
+        let out_r_raw = soft((mid - wide + room_r * 0.6 * w) * level);
 
-        (out_l, out_r)
+        // BS2B Binaural crossfeed stage (subtle speaker staging)
+        let (cross_l, cross_r) = self.bs2b.process(out_l_raw, out_r_raw, (0.5 * w).min(0.8));
+
+        // Fast peak limiter (zero distortion across all devices)
+        self.limiter.process(cross_l, cross_r)
     }
 }
 

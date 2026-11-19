@@ -34,7 +34,9 @@ jobs:
           echo "Using NDK: $NDK_DIR"
           export ANDROID_NDK_HOME="$NDK_DIR"
           mkdir -p mobile/src/stmobile/jniLibs
-          cargo ndk --platform 24 -t arm64-v8a -o mobile/src/stmobile/jniLibs build --release --manifest-path native/playtube-core/Cargo.toml
+          cd native/playtube-core
+          cargo ndk --platform 24 -t arm64-v8a -o ../../mobile/src/stmobile/jniLibs build --release
+          cd ../..
           ls -lh mobile/src/stmobile/jniLibs/arm64-v8a/
 
       - name: Build PlayTube Debug
