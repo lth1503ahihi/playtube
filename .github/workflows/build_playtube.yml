@@ -1,7 +1,7 @@
 name: Build PlayTube APK
 
 on:
-  workflow_dispatch: # Cho phép bấm nút build bất kỳ lúc nào
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,9 +19,6 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Build PlayTube
         run: |
           chmod +x gradlew
@@ -30,11 +27,11 @@ jobs:
       - name: Collect APKs
         run: |
           mkdir -p dist
-          find mobile/build/outputs/apk/ -name "*.apk" -exec cp {} dist/ \;
+          find mobile/build/outputs/ -name "*.apk" -exec cp {} dist/ \;
           ls -lh dist/
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: PlayTube-arm64
+          name: PlayTube-APK
           path: dist/*.apk
