@@ -232,6 +232,7 @@
     <string name="mobile_dialog_unavailable">Chưa có sẵn trên thiết bị di động.</string>
     <string name="mobile_back">Quay lại</string>
     <string name="mobile_search_voice">Tìm kiếm bằng giọng nói</string>
+    <string name="mobile_search_voice_unavailable">Thiết bị chưa cài đặt dịch vụ nhận diện giọng nói (Google Speech Services)</string>
     <string name="mobile_search_insert">Tinh chỉnh tìm kiếm này</string>
     <string name="mobile_search_clear">Xóa tìm kiếm</string>
     <string name="mobile_search_filters">Bộ lọc tìm kiếm</string>

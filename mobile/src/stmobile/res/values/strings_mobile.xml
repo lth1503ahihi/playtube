@@ -224,6 +224,7 @@
     <string name="mobile_search_hint">Search for videos</string>
     <string name="mobile_search_button">Search</string>
     <string name="mobile_search_voice">Voice search</string>
+    <string name="mobile_search_voice_unavailable">No voice recognition service found on this device</string>
     <!-- The NW arrow on a suggestion row: puts the text into the field without searching. -->
     <string name="mobile_search_insert">Refine this search</string>
     <string name="mobile_search_clear">Clear search</string>

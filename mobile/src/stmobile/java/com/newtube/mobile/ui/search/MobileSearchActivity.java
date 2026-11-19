@@ -1275,20 +1275,18 @@ public class MobileSearchActivity extends MobileActivity
     }
 
     private void launchVoiceRecognition() {
-        if (!isRecognitionAvailable()) {
-            // Voice unavailable (e.g. emulator without a recognizer): fall back to text.
-            showKeyboard();
-            return;
-        }
-
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.mobile_search_hint));
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, java.util.Locale.getDefault().toString());
 
         try {
             startActivityForResult(intent, REQUEST_VOICE);
-        } catch (ActivityNotFoundException e) {
-            // No voice activity to handle the intent: fall back to text input.
+        } catch (ActivityNotFoundException | SecurityException e) {
+            // No voice activity to handle the intent: notify user and fall back to text input.
+            android.widget.Toast.makeText(this,
+                    R.string.mobile_search_voice_unavailable,
+                    android.widget.Toast.LENGTH_LONG).show();
             showKeyboard();
         }
     }
