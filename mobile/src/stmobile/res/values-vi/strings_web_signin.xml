@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mobile_web_signin_title">Đăng nhập vào YouTube</string>
+    <string name="mobile_web_signin_privacy">Đây là trang chính thức của Google. PlayTube không bao giờ xem được mật khẩu của bạn.</string>
+    <string name="mobile_web_signin_loading">Đang mở trang Google</string>
+    <string name="mobile_web_signin_finishing">Đang hoàn tất đăng nhập</string>
+    <string name="mobile_web_signin_failed">Không thể hoàn tất đăng nhập YouTube. Kiểm tra kết nối mạng và thử lại.</string>
+    <string name="mobile_web_signin_retry">Thử lại</string>
+    <string name="mobile_web_signin_explain_title">Thêm một lần đăng nhập</string>
+    <string name="mobile_web_signin_explain_need">Gửi tin nhắn trò chuyện trực tiếp và thích bài đăng yêu cầu bạn đăng nhập trên trang web của YouTube. Chỉ mất 1 phút và chỉ cần làm một lần.</string>
+    <string name="mobile_web_signin_explain_current">Tài khoản đăng nhập hiện tại của bạn vẫn giữ nguyên để xem video, lịch sử và kênh đăng ký.</string>
+    <string name="mobile_web_signin_explain_risk">Sử dụng cùng một tài khoản Google.</string>
+    <string name="mobile_web_signin_google">Đăng nhập với Google</string>
+    <string name="mobile_web_signin_not_now">Để sau</string>
+    <string name="mobile_web_signin_sign_out">Đăng xuất khỏi phiên web YouTube?</string>
+    <string name="mobile_web_signin_sign_out_confirm">Bạn sẽ cần đăng nhập lại để gửi tin nhắn trò chuyện trực tiếp.</string>
+    <string name="mobile_web_signin_sign_out_failed">Không thể đăng xuất. Thử lại.</string>
+    <string name="mobile_web_signin_signed_out">Đã đăng xuất khỏi phiên web YouTube</string>
+    <string name="mobile_web_signin_add">Thêm tài khoản web</string>
+    <string name="mobile_web_signin_choose">Trò chuyện dưới tên</string>
+    <string name="mobile_web_signin_switch">Chuyển tài khoản web</string>
+    <string name="mobile_web_signin_expired">Phiên web YouTube đã hết hạn. Vui lòng đăng nhập lại.</string>
+    <string name="mobile_chat_as">Trò chuyện dưới tên %1$s</string>
+    <string name="mobile_chat_hint">Nói điều gì đó...</string>
+    <string name="mobile_chat_send">Gửi tin nhắn</string>
+    <string name="mobile_chat_send_failed">Không thể gửi tin nhắn. Vui lòng thử lại.</string>
+    <string name="mobile_chat_not_ready">Khung trò chuyện chưa sẵn sàng. Thử lại sau giây lát.</string>
+</resources>

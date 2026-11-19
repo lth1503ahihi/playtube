@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="mobile_settings_search_hint">Tìm kiếm cài đặt</string>
+    <string name="mobile_settings_search_none">Không tìm thấy cài đặt phù hợp với “%1$s”</string>
+
+    <string name="mobile_settings_search_kw_account">dang nhap tai khoan google ho so chuyen doi</string>
+    <string name="mobile_settings_search_kw_theme">giao dien sang toi ban dem mau sac mau chu</string>
+    <string name="mobile_settings_search_kw_customize">tuy bien ca nhan hoa giao dien kieu dang bo cuc</string>
+    <string name="mobile_settings_search_kw_country">quoc gia vung mien khu vuc</string>
+    <string name="mobile_settings_search_kw_start_screen">khoi dong man hinh mo mac dinh trang chu</string>
+    <string name="mobile_settings_search_kw_interface_size">kich thuoc giao dien phong to thu nho phong chu ti le</string>
+    <string name="mobile_settings_search_kw_tabs">thanh dieu huong duoi muc chuyen muc kham pha</string>
+    <string name="mobile_settings_search_kw_hidden">an video da xem loc cong chieu truc tiep</string>
+    <string name="mobile_settings_search_kw_video_menu">menu ba cham tuy chon menu phu</string>
+    <string name="mobile_settings_search_kw_channels_order">sap xep kenh dang ky kenh theo doi</string>
+    <string name="mobile_settings_search_kw_watch_history">tam dung lich su xem an danh</string>
+    <string name="mobile_settings_search_kw_video_ends">tu dong phat lap lai phat ngau nhien video tiep theo</string>
+    <string name="mobile_settings_search_kw_background">phat trong nen hinh trong hinh pip chi am thanh thu nho</string>
+    <string name="mobile_settings_search_kw_natural_voice">giong noi tu nhien toc do am thanh</string>
+    <string name="mobile_settings_search_kw_audio_focus">cuoc goi thong bao gian doan ung dung khac</string>
+    <string name="mobile_settings_search_kw_hide_related">de xuat goi y lien quan an video</string>
+    <string name="mobile_settings_search_kw_dislikes">so luot khong thich dislike hien dislike</string>
+    <string name="mobile_settings_search_kw_home_layout">bo cuc trang chu luoi danh sach hang smarttube</string>
+    <string name="mobile_settings_search_kw_app_icon">bieu tuong logo icon man hinh chinh play neon lua</string>
+    <string name="mobile_settings_search_kw_quality">do phan giai chat luong 4k 1080p 720p tiet kiem du lieu 4g 5g</string>
+    <string name="mobile_settings_search_kw_loudness">chuan hoa am luong am thanh lon nho</string>
+    <string name="mobile_settings_search_kw_player_volume">khuech dai am thanh am luong 125 150 175 200</string>
+    <string name="mobile_settings_search_kw_captions">phu de chu chay cc</string>
+    <string name="mobile_settings_search_kw_sponsorblock">bo qua quang cao tai tro doan mo dau sponsorblock</string>
+    <string name="mobile_settings_search_kw_dearrow">tieu de hinh thu nho dearrow</string>
+    <string name="mobile_settings_search_kw_backup">sao luu khoi phuc xuat nhap cai dat</string>
+    <string name="mobile_settings_search_kw_buffer">bo dem bo nho dem ram streaming</string>
+    <string name="mobile_settings_search_kw_dns">dns ipv4 ipv6 may chu</string>
+    <string name="mobile_settings_search_kw_updates">cap nhat phien ban moi thong bao</string>
+    <string name="mobile_settings_search_kw_gesture_levels">cu chi vuot do sang am luong</string>
+    <string name="mobile_settings_search_kw_gesture_seek">vuot tua video tua nhanh</string>
+    <string name="mobile_settings_search_kw_double_tap_seek">cham hai lan tua nhanh tua lai so giay</string>
+    <string name="mobile_settings_search_kw_equalizer">bo can bang am thanh equalizer eq bass treble am tram am bong</string>
+</resources>

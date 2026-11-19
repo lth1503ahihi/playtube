@@ -1,66 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Tên ứng dụng -->
     <string name="app_name" translatable="false">PlayTube</string>
-
-    <!-- Thanh điều hướng dưới & Trang Bạn -->
-    <string name="mobile_nav_you">Bạn</string>
-    <string name="mobile_nav_subs">Đăng ký</string>
-    <string name="mobile_nav_hint_tabs">Tùy chỉnh tab  ›</string>
-    <string name="mobile_nav_hint_change">Thay đổi</string>
-    <string name="mobile_nav_hint_confirm_title">Tùy chỉnh các tab?</string>
-    <string name="mobile_nav_hint_confirm_body">Mở Cài đặt để chọn và sắp xếp các tab trên thanh điều hướng dưới.</string>
-    <string name="mobile_nav_hint_confirm_open">Mở</string>
-    <string name="mobile_you_explore">Khám phá</string>
-    <string name="mobile_you_library">Thư viện</string>
-    <string name="action_signin" tools:ignore="ExtraTranslation">Đăng nhập</string>
-    <string name="mobile_search_hint">Tìm kiếm video, bài hát...</string>
-
-    <!-- Trình phát video (Player) -->
     <string name="mobile_player_back">Quay lại</string>
     <string name="mobile_player_minimize">Thu nhỏ</string>
     <string name="mobile_player_audio_only">Chỉ nghe âm thanh</string>
-    <string name="mobile_player_audio_off">Bật hình ảnh</string>
+    <string name="mobile_player_audio_off">Bật video</string>
     <string name="mobile_player_play">Phát</string>
     <string name="mobile_player_pause">Tạm dừng</string>
     <string name="mobile_player_replay">Phát lại</string>
     <string name="mobile_player_fullscreen">Toàn màn hình</string>
+    <string name="mobile_player_hide_actions">Ẩn các nút điều khiển</string>
+    <string name="mobile_player_show_actions">Hiện các nút điều khiển</string>
     <string name="mobile_player_quality">Chất lượng</string>
     <string name="mobile_player_audio_track">Bản âm thanh</string>
     <string name="mobile_player_subtitles">Phụ đề</string>
     <string name="mobile_player_speed">Tốc độ phát</string>
     <string name="mobile_player_sleep_timer">Hẹn giờ ngủ</string>
-    <string name="mobile_player_autoplay">Tự động phát</string>
-    <string name="mobile_player_pip">Hình trong hình (PiP)</string>
-    <string name="mobile_player_previous">Bài trước</string>
-    <string name="mobile_player_next">Bài tiếp theo</string>
-    <string name="mobile_playlist_play_all">Phát tất cả</string>
-    <string name="mobile_playlist_shuffle">Trộn bài</string>
-    <string name="mobile_player_more">Tùy chọn khác</string>
-    <string name="mobile_menu_more">Thêm</string>
     <string name="mobile_feed_all">Tất cả</string>
-    <string name="mobile_feed_show_filters">Bộ lọc</string>
-    <string name="mobile_sleep_end_of_video">Hết video</string>
+    <string name="mobile_feed_show_filters">Hiện bộ lọc</string>
+    <string name="mobile_player_autoplay">Tự động phát</string>
+    <string name="mobile_sleep_end_of_video">Khi hết video</string>
     <string name="mobile_sleep_left">Còn %1$d phút</string>
     <string name="mobile_sleep_toast_minutes">Video sẽ tạm dừng sau %1$s</string>
-    <string name="mobile_sleep_toast_end">Video sẽ dừng khi hết bài</string>
+    <string name="mobile_sleep_toast_end">Video sẽ dừng khi kết thúc</string>
     <string name="mobile_sleep_toast_off">Đã tắt hẹn giờ ngủ</string>
+    <string name="mobile_player_chapter_button">Phần: %1$s. Xem tất cả các phần</string>
     <string name="mobile_player_release_to_cancel">Thả tay để hủy</string>
-    <string name="mobile_player_zoom_fill">Thu phóng đầy màn hình</string>
+    <string name="mobile_player_pip">Hình trong hình (PiP)</string>
+    <string name="mobile_player_previous">Video trước</string>
+    <string name="mobile_player_next">Video tiếp theo</string>
+    <string name="mobile_playlist_play_all">Phát tất cả</string>
+    <string name="mobile_playlist_shuffle">Trộn bài</string>
+    <string name="mobile_player_zoom_fill">Thu phóng vừa màn hình</string>
     <string name="mobile_player_zoom_original">Gốc</string>
-
-    <!-- Shorts -->
+    <string name="mobile_player_more">Tùy chọn khác</string>
+    <string name="mobile_menu_more">Thêm</string>
+    <string name="mobile_menu_watch_regular">Xem bằng trình phát thường</string>
     <string name="mobile_shorts_autoscroll">Tự động cuộn</string>
     <string name="mobile_player_skip_segment">Bỏ qua</string>
-
-    <!-- Đăng nhập -->
+    <string name="mobile_search_hint">Tìm kiếm video, bài hát...</string>
+    <string name="mobile_nav_you">Bạn</string>
+    <string name="mobile_nav_hint_tabs">Tùy chỉnh tab  ›</string>
+    <string name="mobile_nav_hint_change">Thay đổi</string>
+    <string name="mobile_nav_hint_confirm_title">Tùy chỉnh tab?</string>
+    <string name="mobile_nav_hint_confirm_body">Mở Cài đặt để chọn và sắp xếp các tab trên thanh điều hướng dưới.</string>
+    <string name="mobile_nav_hint_confirm_open">Mở</string>
+    <string name="mobile_nav_subs">Đăng ký</string>
+    <string name="mobile_you_explore">Khám phá</string>
+    <string name="mobile_you_library">Thư viện</string>
     <string name="mobile_signin_title">Đăng nhập</string>
     <string name="mobile_signin_lead">Kết nối tài khoản Google để đồng bộ kênh đăng ký, danh sách phát và lịch sử.</string>
     <string name="mobile_signin_step1_title">Chạm “Tiếp tục với Google”</string>
     <string name="mobile_signin_step1_caption">Trang đăng nhập Google sẽ mở ngay tại đây.</string>
-    <string name="mobile_signin_step2_title">Chọn tài khoản và cấp quyền</string>
-
-    <!-- Trạng thái trống khi chưa đăng nhập -->
+    <string name="mobile_signin_step2_title">Chọn tài khoản và cho phép truy cập</string>
     <string name="mobile_empty_signin_section">Đăng nhập để xem %1$s</string>
     <string name="mobile_empty_signin_generic">Đăng nhập để xem nội dung này</string>
     <string name="mobile_empty_signin_subscriptions">Đăng nhập để xem các kênh đăng ký của bạn</string>
@@ -69,14 +61,38 @@
     <string name="mobile_empty_signin_my_videos">Đăng nhập để xem video của bạn</string>
     <string name="mobile_empty_signin_history">Đăng nhập để xem lịch sử xem</string>
     <string name="mobile_empty_signin_notifications">Đăng nhập để xem thông báo</string>
-
-    <!-- Tải xuống (Downloads) -->
-    <string name="mobile_download_title">Tải xuống</string>
-    <string name="mobile_download_quality">Chất lượng tải</string>
-    <string name="mobile_download_audio">Chỉ tải âm thanh</string>
-    <string name="mobile_download_video">Tải video</string>
-    <string name="mobile_download_downloading">Đang tải...</string>
-    <string name="mobile_download_completed">Đã tải xong</string>
-    <string name="mobile_download_failed">Tải thất bại</string>
+    <string name="action_signin">Đăng nhập</string>
+    <string name="mobile_download_audio_only">Chỉ tải âm thanh</string>
+    <string name="mobile_download_cancel">Hủy tải</string>
     <string name="mobile_download_delete">Xóa bản tải</string>
+    <string name="mobile_download_pause">Tạm dừng</string>
+    <string name="mobile_download_resume">Tiếp tục</string>
+    <string name="mobile_player_loop_video">Lặp lại video</string>
+    <string name="mobile_player_loop_off">Tắt lặp lại</string>
+    <string name="mobile_player_comments">Bình luận</string>
+    <string name="mobile_player_no_comments">Chưa có bình luận nào</string>
+    <string name="mobile_player_comments_disabled">Tính năng bình luận đã bị tắt</string>
+    <string name="mobile_player_top_comments">Bình luận hàng đầu</string>
+    <string name="mobile_player_newest_comments">Mới nhất trước</string>
+    <string name="mobile_player_like">Thích</string>
+    <string name="mobile_player_dislike">Không thích</string>
+    <string name="mobile_player_share">Chia sẻ</string>
+    <string name="mobile_player_download">Tải xuống</string>
+    <string name="mobile_player_subscribe">Đăng ký</string>
+    <string name="mobile_player_subscribed">Đã đăng ký</string>
+    <string name="mobile_player_unsubscribe">Hủy đăng ký</string>
+    <string name="mobile_download_quality">Chất lượng tải xuống</string>
+    <string name="mobile_download_video">Tải video</string>
+    <string name="mobile_download_failed">Tải xuống thất bại</string>
+    <string name="mobile_download_completed">Đã tải xong</string>
+    <string name="mobile_shorts_like">Thích</string>
+    <string name="mobile_shorts_dislike">Không thích</string>
+    <string name="mobile_shorts_share">Chia sẻ</string>
+    <string name="mobile_shorts_sound">Âm thanh</string>
+    <string name="mobile_equalizer_title">Bộ cân bằng âm thanh</string>
+    <string name="mobile_equalizer_custom">Tùy chỉnh</string>
+    <string name="mobile_equalizer_preset">Cấu hình sẵn</string>
+    <string name="mobile_equalizer_reset">Đặt lại</string>
+    <string name="mobile_equalizer_bass_boost">Tăng âm trầm (Bass)</string>
+    <string name="mobile_equalizer_virtualizer">Hiệu ứng vòm (3D)</string>
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="meetune_home">Nhạc</string>
+    <string name="meetune_explore">Khám phá</string>
+    <string name="meetune_library">Thư viện nhạc</string>
+    <string name="meetune_queue">Hàng đợi phát</string>
+    <string name="meetune_lyrics">Lời bài hát</string>
+    <string name="meetune_like">Thích bài hát</string>
+    <string name="meetune_head_tracking">Theo dõi chuyển động đầu</string>
+    <string name="meetune_crossfade">Chuyển bài mượt mà (Crossfade)</string>
+    <string name="meetune_title">MeeTune</string>
+    <string name="meetune_now_playing">Đang phát</string>
+    <string name="meetune_synced_lyrics">Lời bài hát đồng bộ</string>
+    <string name="meetune_no_lyrics">Không có lời bài hát</string>
+    <string name="meetune_equalizer">Bộ cân bằng âm thanh</string>
+    <string name="meetune_spatial_audio">Âm thanh không gian (Spatial Audio)</string>
+    <string name="meetune_dolby">Âm thanh Dolby</string>
+    <string name="meetune_speed">Tốc độ bài hát</string>
+    <string name="meetune_audio_quality">Chất lượng âm thanh</string>
+    <string name="meetune_radio">Bắt đầu radio</string>
+    <string name="meetune_liked_songs">Bài hát đã thích</string>
+    <string name="meetune_download_song">Tải bài hát này</string>
+    <string name="meetune_offline">Phát ngoại tuyến</string>
+</resources>

@@ -3,6 +3,9 @@ name: Build PlayTube APK
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,19 +22,28 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Build PlayTube
+      - name: Build PlayTube Debug
         run: |
           chmod +x gradlew
           ./gradlew :mobile:assembleStmobileDebug
 
-      - name: Collect APKs
+      - name: Collect ARM64 APK
         run: |
           mkdir -p dist
-          find mobile/build/outputs/ -name "*.apk" -exec cp {} dist/ \;
+          find mobile/build/outputs/ -name "*arm64-v8a*.apk" -exec cp {} dist/PlayTube_arm64-v8a.apk \;
           ls -lh dist/
 
-      - name: Upload APK
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PlayTube-APK
-          path: dist/*.apk
+          name: PlayTube-arm64
+          path: dist/PlayTube_arm64-v8a.apk
+
+      - name: Publish to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v1.0.${{ github.run_number }}"
+          gh release create "$TAG" dist/PlayTube_arm64-v8a.apk \
+            --title "PlayTube $TAG (Tiếng Việt & English)" \
+            --notes "Bản build PlayTube arm64-v8a dành cho điện thoại Android (LG G8X / Evolution X) hỗ trợ Full Tiếng Việt."
