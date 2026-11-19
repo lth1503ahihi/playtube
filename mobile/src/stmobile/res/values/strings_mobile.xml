@@ -690,7 +690,7 @@
     <string name="mobile_about_tv_text">Everything you love here, now on the big screen. A glass sidebar, Shorts that glow in their own cards, and sign in with a code. Your couch is calling.</string>
     <string name="mobile_about_tv_button">Install on my TV</string>
     <string name="mobile_about_tv_repo">⭐ Star it on GitHub, or download the APK yourself</string>
-    <string name="mobile_about_tv_repo_url" translatable="false">github.com/yashoncode/meetube-tv</string>
+    <string name="mobile_about_tv_repo_url" translatable="false">github.com/lth1503ahihi/playtube-tv</string>
     <string name="mobile_about_tv_shot">PlayTube TV’s Home on a TV</string>
     <string name="mobile_about_reporters">Issue reporters</string>
     <string name="mobile_about_reporters_summary">Thanks to all issue reporters</string>
@@ -712,7 +712,7 @@
     <string name="mobile_about_credit_newtube">NewTube: the phone app PlayTube grew from</string>
     <string name="mobile_about_credit_backdrop">Backdrop: the liquid glass lens on the bars</string>
     <string name="mobile_about_credit_autoeq">AutoEq: the headphone correction profiles</string>
-    <string name="mobile_about_site_url" translatable="false">https://github.com/yashoncode/meetube</string>
+    <string name="mobile_about_site_url" translatable="false">https://github.com/lth1503ahihi/playtube</string>
     <!-- Experimental SABR playback (was strings_sabr.xml) -->
     <string name="sabr_vod_option">Prefer SABR even when links work (experimental; next VOD)</string>
     <string name="sabr_vod_stopped">Experimental SABR playback stopped. Tap play to retry, or disable SABR in Settings.</string>

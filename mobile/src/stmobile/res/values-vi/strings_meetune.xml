@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+    <string name="meetune_name">PlayTune</string>
+    <string name="meetune_try">Thử PlayTune</string>
     <string name="meetune_home">Nhạc</string>
     <string name="meetune_explore">Khám phá</string>
     <string name="meetune_library">Thư viện nhạc</string>
-    <string name="meetune_queue">Tiếp theo</string>
-    <string name="meetune_lyrics">Lời bài hát</string>
-    <string name="meetune_like">Thích</string>
-    <string name="meetune_head_tracking">Theo dõi chuyển động đầu</string>
-    <string name="meetune_crossfade">Chuyển bài mượt mà (Crossfade)</string>
-    <string name="meetune_title">PlayTune</string>
-    <string name="meetune_now_playing">Đang phát</string>
-    <string name="meetune_synced_lyrics">Lời bài hát đồng bộ</string>
-    <string name="meetune_no_lyrics">Không có lời bài hát</string>
-    <string name="meetune_equalizer">Bộ cân bằng âm thanh</string>
-    <string name="meetune_spatial_audio">Âm thanh không gian (Spatial Audio)</string>
-    <string name="meetune_dolby">Âm thanh Dolby</string>
-    <string name="meetune_speed">Tốc độ bài hát</string>
-    <string name="meetune_audio_quality">Chất lượng âm thanh</string>
-    <string name="meetune_radio">Bắt đầu radio</string>
-    <string name="meetune_liked_songs">Bài hát đã thích</string>
-    <string name="meetune_download_song">Tải bài hát này</string>
-    <string name="meetune_offline">Phát ngoại tuyến</string>
-    <string name="meetune_name">PlayTune</string>
-    <string name="meetune_try">Thử PlayTune</string>
     <string name="meetune_search">Tìm kiếm</string>
     <string name="meetune_search_hint">Bài hát, album, nghệ sĩ</string>
     <string name="meetune_back">Quay lại</string>
@@ -68,9 +50,12 @@
     <string name="meetune_cached">Bài hát đã lưu đệm</string>
     <string name="meetune_cached_summary">Phát nhạc khi không có mạng</string>
     <string name="meetune_storage_songs">Bài hát PlayTune (trong bộ nhớ đệm)</string>
+    <string name="meetune_queue">Tiếp theo</string>
+    <string name="meetune_lyrics">Lời bài hát</string>
     <string name="meetune_focus">Tập trung vào lời bài hát</string>
     <string name="meetune_cast">Truyền</string>
     <string name="meetune_minimize">Thu nhỏ</string>
+    <string name="meetune_like">Thích</string>
     <string name="meetune_this_phone">Điện thoại này</string>
     <string name="meetune_sort">Sắp xếp</string>
     <string name="meetune_sort_added">Ngày thêm</string>
@@ -123,7 +108,9 @@
     <string name="meetune_spatial_strong_summary">Rộng rãi như có loa phía trước</string>
     <string name="meetune_spatial_cinema">Rạp phim</string>
     <string name="meetune_spatial_cinema_summary">Rộng nhất với âm trầm sâu hơn</string>
+    <string name="meetune_head_tracking">Theo dõi chuyển động đầu</string>
     <string name="meetune_head_tracking_summary">Âm thanh cố định khi bạn xoay đầu trên tai nghe hỗ trợ</string>
+    <string name="meetune_crossfade">Chuyển bài mượt mà (Crossfade)</string>
     <string name="meetune_volume">Âm lượng</string>
     <string name="meetune_volume_note">Chỉ dành cho nhạc; video có mức âm lượng riêng.</string>
     <string name="meetune_crossfade_off">Tắt</string>
@@ -161,8 +148,8 @@
     <string name="meetune_canvas_light_summary">Cắt vòng lặp từ video 480p, giảm nửa dung lượng</string>
     <string name="meetune_downloads">Tải xuống</string>
     <string name="meetune_history">Lịch sử</string>
-    <string name="meetune_download_started">Đang tải xuống. Xem trong Thư viện > Tải xuống</string>
-    <string name="meetune_download_already_here">Đã tải xong. Xem trong Thư viện > Tải xuống</string>
+    <string name="meetune_download_started">Đang tải xuống. Xem trong Thư viện &gt; Tải xuống</string>
+    <string name="meetune_download_already_here">Đã tải xong. Xem trong Thư viện &gt; Tải xuống</string>
     <string name="meetune_downloading">Đang tải %1$d%%</string>
     <string name="meetune_download_failed">Tải xuống thất bại</string>
     <string name="meetune_mode_autoplay">Bật tự động phát</string>
@@ -179,16 +166,110 @@
     <string name="meetune_save_phone">Lưu vào máy này</string>
     <string name="meetune_unsave_phone">Xóa khỏi máy này</string>
     <string name="meetune_set_library">Thư viện trên điện thoại này</string>
-    <string name="meetune_export_library">Xuất thư viện</string>
-    <string name="meetune_import_library">Nhập thư viện</string>
-    <string name="meetune_folder">Thư mục nhạc</string>
-    <string name="meetune_download_quality">Chất lượng tải xuống</string>
-    <string name="meetune_addons">Tiện ích mở rộng</string>
+    <string name="meetune_spotify_import">Nhập từ Spotify</string>
     <string name="meetune_spotify">Spotify</string>
     <string name="meetune_spotify_not_linked">Chưa liên kết. Chạm để đăng nhập</string>
-    <string name="meetune_spotify_import">Nhập từ Spotify</string>
-    <string name="meetune_performance">Chế độ hiệu năng cao</string>
-    <string name="meetune_performance_summary">Tắt các hiệu ứng làm mờ và kính để tiết kiệm pin</string>
-    <string name="meetune_correction">Hiệu chỉnh tai nghe</string>
-    <string name="meetune_correction_summary">Cân bằng âm thanh theo đặc tuyến từng dòng tai nghe</string>
+    <plurals name="meetune_storage_songs_value">
+        <item quantity="one">%1$s· Bài hát%2$d</item>
+        <item quantity="other">%1$s· Bài hát%2$d</item>
+    </plurals>
+    <string name="meetune_eq_tone_readout">Nghiêng%1$s· Giữa%2$s</string>
+    <string name="meetune_eq_tone_desc">Bàn phím giai điệu. Nghiêng%1$s, giữa%2$s. Kéo để thay đổi.</string>
+    <string name="meetune_eq_broad">Rộng</string>
+    <string name="meetune_eq_focused">Tập trung</string>
+    <string name="meetune_eq_tone_note_broad">Kéo sang trái để có âm thanh ấm hơn và sang phải để có âm thanh sáng hơn; xuống múc vào giữa, lên đưa nó về phía trước. Broad di chuyển các dải quang phổ rộng cùng một lúc.</string>
+    <string name="meetune_eq_tone_note_focused">Kéo sang trái để có âm thanh ấm hơn và sang phải để có âm thanh sáng hơn; xuống múc vào giữa, lên đưa nó về phía trước. Tập trung chỉ di chuyển ở đầu xa và phần giữa hẹp.</string>
+    <string-array name="meetune_eq_presets">
+        <item>phẳng</item>
+        <item>Tăng âm trầm</item>
+        <item>Giảm âm trầm</item>
+        <item>Tăng âm treble</item>
+        <item>Giọng hát</item>
+        <item>đá</item>
+        <item>bật lên</item>
+        <item>nhạc jazz</item>
+        <item>cổ điển</item>
+        <item>điện tử</item>
+        <item>hip hop</item>
+        <item>Âm thanh</item>
+        <item>Độ ồn</item>
+    </string-array>
+    <string name="meetune_eq_bands_note">Di chuyển một dải sẽ để lại cài đặt trước và đường cong sẽ trở thành của riêng bạn.</string>
+    <string name="meetune_eq_balance_note">Chuyển âm thanh về phía một tai bằng cách làm dịu tai kia.</string>
+    <string name="meetune_eq_left">L</string>
+    <string name="meetune_eq_right">R</string>
+    <string name="meetune_eq_system_none">Điện thoại này không có bảng cân bằng</string>
+    <string name="meetune_eq_system_note">Chạy theo PlayTune\'s, trên âm thanh của điện thoại. Sử dụng cả hai áp dụng cả hai.</string>
+    <string name="meetune_disliked">Bạn sẽ không được hiển thị thông tin này nhiều</string>
+    <string name="meetune_rate_sign_in">Đăng nhập để thích bài hát</string>
+    <string name="meetune_rate_failed">Không thể xếp hạng bài hát này</string>
+    <string name="meetune_uncache_none">Không có gì của bài hát này được lưu trữ</string>
+    <string name="meetune_head_tracking_summary_none">Cần âm thanh không gian của điện thoại này: đeo tai nghe hỗ trợ nó và bật nó trong cài đặt Bluetooth của họ</string>
+    <string name="meetune_crossfade_seconds">%1$ds</string>
+    <string name="meetune_crossfade_note">Sự kết thúc của một bài hát nhỏ dần sang bài tiếp theo. Các bài hát từ Tự động phát, hàng đợi hoặc Lặp lại; không phải khi quá trình phát lại dừng sau bài hát</string>
+    <string name="meetune_bit_perfect_summary_none">Cần Android 14 trở lên</string>
+    <string name="meetune_stream_note">Dữ liệu di động cũng bao gồm các điểm truy cập và các mạng có đồng hồ đo khác</string>
+    <string name="meetune_speed_dial_summary">Home\'s Nghe lại dưới dạng các trang gạch vuông, xem nhanh chín trang</string>
+    <string name="meetune_stream_high_summary">Âm thanh hay nhất của một bài hát, lên tới khoảng 160 kbps</string>
+    <string name="meetune_stream_normal_summary">Khoảng 128 kbps, sử dụng ít dữ liệu hơn</string>
+    <string name="meetune_stream_low_summary">Khoảng 70 kbps, dành cho dữ liệu chậm hoặc hạn chế</string>
+    <plurals name="meetune_download_count">
+        <item quantity="one">Bài hát%1$dtrên điện thoại này</item>
+        <item quantity="other">Bài hát%1$dtrên điện thoại này</item>
+    </plurals>
+    <string name="meetune_downloads_note">Các bài hát luôn được tải xuống dưới dạng âm thanh vào thư mục Nhạc ở trên.</string>
+    <string name="meetune_upgrade_quality">Nâng cấp chất lượng</string>
+    <string name="meetune_upgraded">Bài hát này phát ở âm thanh hay nhất hiện nay</string>
+    <string name="meetune_canvas_note">Vòng lặp được tìm nạp một lần và phát sau đó từ điện thoại. Canvas vẫn giữ nguyên trong trình tiết kiệm pin, khi điện thoại nóng và tắt hoạt ảnh.</string>
+    <string name="meetune_canvas_song_off">Không có canvas cho bài hát này</string>
+    <string name="meetune_canvas_song_on">Hiển thị canvas cho bài hát này</string>
+    <string name="meetune_canvas_next_part">Chọn phần khác</string>
+    <string name="meetune_canvas_not_video">Không phải video này</string>
+    <string name="meetune_canvas_use_video">Sử dụng video âm nhạc</string>
+    <string name="meetune_lyrics_offset">lời bài hát bù đắp</string>
+    <string name="meetune_lyrics_offset_value">Lời bài hát bù đắp:%1$ss</string>
+    <string name="meetune_lyrics_later">−0,5 giây</string>
+    <string name="meetune_lyrics_reset">Đặt lại</string>
+    <string name="meetune_lyrics_sooner">+0,5 giây</string>
+    <string name="meetune_send_log">Gửi nhật ký</string>
+    <string name="meetune_sleep_end_of_song">Kết thúc bài hát</string>
+    <string name="meetune_sleep_toast_end">Bài hát sẽ tạm dừng ở cuối</string>
+    <plurals name="meetune_history_count">
+        <item quantity="one">Đã phát bài hát%1$d</item>
+        <item quantity="other">Bài hát%1$dđược phát</item>
+    </plurals>
+    <string name="meetune_pin">Ghim</string>
+    <string name="meetune_unpin">Bỏ ghim</string>
+    <string name="meetune_saved_phone">Đã lưu trên điện thoại này</string>
+    <string name="meetune_unsaved_phone">Đã xóa khỏi điện thoại này</string>
+    <string name="meetune_added_to">Đã thêm vào%1$s</string>
+    <string name="meetune_already_in">Đã có trong%1$s</string>
+    <string name="meetune_youtube_playlist">Danh sách phát YouTube</string>
+    <string name="meetune_export">Xuất thư viện</string>
+    <string name="meetune_export_summary">Danh sách phát trên điện thoại của bạn cũng như album và danh sách phát đã lưu dưới dạng tệp</string>
+    <string name="meetune_import">Nhập thư viện</string>
+    <string name="meetune_import_summary">Thêm danh sách phát và các trang đã lưu từ tệp đã xuất</string>
+    <string name="meetune_library_note">Danh sách phát bạn tạo và các trang bạn lưu vẫn tồn tại trên điện thoại này và không cần có tài khoản. Nhấn và giữ một phím trong Thư viện để ghim, đổi tên hoặc xóa nó.</string>
+    <string name="meetune_exported">Đã xuất thư viện</string>
+    <string name="meetune_export_failed">Không thể ghi tập tin</string>
+    <string name="meetune_imported">Đã nhập danh sách phát%1$dvà các trang đã lưu%2$d</string>
+    <string name="meetune_import_failed">Tệp đó không phải là thư viện PlayTune</string>
+    <string name="meetune_spotify_import_summary">Sao chép danh sách phát Spotify của bạn tại đây, khớp với các bài hát trên YouTube Music. Đăng nhập vào Spotify trước</string>
+    <string name="meetune_spotify_loading">Đọc danh sách phát Spotify của bạn</string>
+    <string name="meetune_spotify_none">Không có danh sách phát trên tài khoản Spotify này</string>
+    <string name="meetune_spotify_import_failed">Spotify không trả lời. Hãy thử lại sau</string>
+    <string name="meetune_spotify_imported">%1$s: Đã tìm thấy%2$dcủa các bài hát%3$d</string>
+    <string name="meetune_import_action">Nhập khẩu</string>
+    <plurals name="meetune_playlist_count">
+        <item quantity="one">bài hát%1$d</item>
+        <item quantity="other">Bài hát%1$d</item>
+    </plurals>
+    <plurals name="meetune_spotify_importing">
+        <item quantity="one">Đang nhập danh sách phát%1$d. Mỗi người nói khi nào xong việc</item>
+        <item quantity="other">Nhập danh sách phát%1$d. Mỗi người nói khi nào xong việc</item>
+    </plurals>
+    <string name="meetune_set_addons">Tiện ích bổ sung</string>
+    <string name="meetune_spotify_linked">Đã liên kết. Nhấn để đăng xuất</string>
+    <string name="meetune_addons_note">Tiện ích bổ sung liên kết PlayTune với các dịch vụ khác. Chúng không chính thức, chỉ đọc và có thể ngừng hoạt động khi các dịch vụ đó thay đổi.</string>
+    <string name="meetune_hints">Cái này làm gì</string>
 </resources>

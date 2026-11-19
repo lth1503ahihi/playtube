@@ -2,7 +2,6 @@
 <resources>
     <string name="mobile_settings_search_hint">Tìm kiếm cài đặt</string>
     <string name="mobile_settings_search_none">Không tìm thấy cài đặt phù hợp với “%1$s”</string>
-
     <string name="mobile_settings_search_kw_account">dang nhap tai khoan google ho so chuyen doi</string>
     <string name="mobile_settings_search_kw_theme">giao dien sang toi ban dem mau sac mau chu</string>
     <string name="mobile_settings_search_kw_customize">tuy bien ca nhan hoa giao dien kieu dang bo cuc</string>
@@ -36,4 +35,18 @@
     <string name="mobile_settings_search_kw_gesture_seek">vuot tua video tua nhanh</string>
     <string name="mobile_settings_search_kw_double_tap_seek">cham hai lan tua nhanh tua lai so giay</string>
     <string name="mobile_settings_search_kw_equalizer">bo can bang am thanh equalizer eq bass treble am tram am bong</string>
+    <string name="mobile_settings_search_kw_conscrypt">chứng chỉ ssl tls kiểm duyệt bảo mật bị chặn byebyedpi</string>
+    <string name="mobile_settings_search_kw_multi_profiles">hồ sơ mỗi tài khoản khác nhau</string>
+    <string name="mobile_settings_search_kw_diagnostic_log">gỡ lỗi nhật ký báo cáo lỗi</string>
+    <string name="mobile_settings_search_kw_loader">bộ nạp đang tải spinner tiến trình neon kính mờ bánh quy chất lỏng vòng quả cầu blob quỹ đạo</string>
+    <string name="mobile_settings_search_kw_badge_icons">trộn nốt nhạc biểu tượng biểu tượng viên thuốc huy hiệu thời gian</string>
+    <string name="mobile_settings_search_kw_seek_pill">nhấn đúp bỏ qua tìm kiếm tua về phía trước tua lại 10 giây hoạt hình viên thuốc gợn</string>
+    <string name="mobile_settings_search_kw_watched_bar">đã xem tiến trình lịch sử thanh dòng màu đỏ đã xem hình thu nhỏ</string>
+    <string name="mobile_settings_search_kw_home_cast">nút truyền thanh trên cùng ẩn hiển thị tv chromecast</string>
+    <string name="mobile_settings_search_kw_home_chips">chip chủ đề danh mục bộ lọc nhà ẩn chương trình</string>
+    <string name="mobile_settings_search_kw_haptics">xúc giác rung rung buzz đánh dấu thông tin phản hồi chạm tắt</string>
+    <string name="mobile_settings_search_kw_refresh_sound">làm mới âm thanh pop âm thanh kéo vuốt tiếng ồn tắt tiếng</string>
+    <string name="mobile_settings_search_kw_short_ends">vòng lặp ngắn lặp lại tự động cuộn tự động cuộn lần vuốt tiếp theo</string>
+    <string name="mobile_settings_search_kw_stable_volume">âm lượng ổn định nén drc dải động âm thanh lớn yên tĩnh</string>
+    <string name="mobile_settings_search_web_signin">trò chuyện google đăng nhập cookie phiên tài khoản gửi tin nhắn</string>
 </resources>
