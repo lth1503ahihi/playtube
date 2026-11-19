@@ -461,7 +461,7 @@ public class MobileSearchActivity extends MobileActivity
         });
 
         mGrid.setHasFixedSize(true);
-        mGrid.setItemViewCacheSize(8);
+        mGrid.setItemViewCacheSize(16);
         mGrid.setLayoutManager(mLayoutManager);
         mGrid.setAdapter(mAdapter);
         // Next cards' thumbnails decoded before they scroll in (no grey card + fade on a fling).

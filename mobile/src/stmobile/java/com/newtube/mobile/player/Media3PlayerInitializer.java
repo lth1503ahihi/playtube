@@ -204,6 +204,8 @@ public class Media3PlayerInitializer {
         // videos topped out at 608x1080, which YouTube calls 480p (VideoRung).
         int ceiling = VideoRung.ceilingSide(1080);
         trackSelector.setParameters(trackSelector.buildUponParameters()
+                // PLAYTUBE: prefer hardware-accelerated VP9 and H264 on mobile SoCs (cooler device, no software decode)
+                .setPreferredVideoMimeTypes(MimeTypes.VIDEO_VP9, MimeTypes.VIDEO_H264, MimeTypes.VIDEO_AV1)
                 // MEETUBE(issue #177): session audio effects require decoded, non-offloaded audio.
                 .setAudioOffloadPreferences(new AudioOffloadPreferences.Builder()
                         .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_DISABLED)

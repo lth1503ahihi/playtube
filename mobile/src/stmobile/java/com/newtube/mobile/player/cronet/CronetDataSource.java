@@ -427,7 +427,7 @@ public class CronetDataSource extends BaseDataSource implements HttpDataSource {
   @UnstableApi public static final int DEFAULT_READ_TIMEOUT_MILLIS = 8 * 1000;
 
   // The size of read buffer passed to cronet UrlRequest.read().
-  private static final int DEFAULT_READ_BUFFER_SIZE_BYTES = 32 * 1024;
+  private static final int DEFAULT_READ_BUFFER_SIZE_BYTES = 64 * 1024;
 
   private final CronetEngine cronetEngine;
   private final Executor executor;

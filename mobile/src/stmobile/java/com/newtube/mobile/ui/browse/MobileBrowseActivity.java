@@ -1312,7 +1312,7 @@ public class MobileBrowseActivity extends MobileActivity
         // more offscreen holders around (default 2) so a fling-back rebinds/redecodes far fewer cards.
         //noinspection InvalidSetHasFixedSize - match_parent in the layout; lint mixes it up with the chip row
         mContentGrid.setHasFixedSize(true);
-        mContentGrid.setItemViewCacheSize(8);
+        mContentGrid.setItemViewCacheSize(16);
         // MEETUBE(#71): on History a card swiped sideways leaves the watch history, as on a playlist page.
         new androidx.recyclerview.widget.ItemTouchHelper(new androidx.recyclerview.widget.ItemTouchHelper.SimpleCallback(
                 0, androidx.recyclerview.widget.ItemTouchHelper.START | androidx.recyclerview.widget.ItemTouchHelper.END) {
