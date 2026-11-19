@@ -52,6 +52,9 @@
   <string name="settings_language">Ngôn ngữ</string>
   <string name="settings_linked_devices">Các thiết bị được liên kết</string>
   <string name="settings_about">Giới thiệu</string>
+  <string name="about_app">Giới thiệu %1$s</string>
+  <string name="about_source_code">Mã nguồn</string>
+  <string name="about_license">Giấy phép</string>
   <string name="dialog_account_list">Chọn tài khoản</string>
   <string name="dialog_account_none">Không có</string>
   <string name="dialog_remove_account">Đăng xuất</string>

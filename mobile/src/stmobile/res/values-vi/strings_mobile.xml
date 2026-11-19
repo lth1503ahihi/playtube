@@ -93,7 +93,7 @@
     <string name="mobile_menu_repeat">Chế độ lặp lại</string>
     <string name="mobile_menu_shuffle">Trộn bài</string>
     <string name="mobile_menu_zoom">Thu phóng</string>
-    <string name="mobile_menu_background">Chơi ở chế độ nền</string>
+    <string name="mobile_menu_background">Phát trong nền</string>
     <string name="mobile_menu_stats">Số liệu thống kê cho người mọt sách</string>
     <string name="mobile_menu_playlist_add">Lưu vào danh sách phát</string>
     <string name="mobile_menu_queue">Hàng đợi phát lại</string>
@@ -130,7 +130,7 @@
     <string name="mobile_settings_watch_style_classic_desc">Các nút được gắn nhãn và một hàng kênh</string>
     <string name="mobile_settings_player_buttons">Các nút trình phát</string>
     <string name="mobile_settings_player_buttons_summary">Hiển thị hoặc ẩn các nút trên video</string>
-    <string name="mobile_settings_player_buttons_note">Các nút ẩn sẽ tắt trên mọi video. Một sự thay đổi sẽ hiển thị vào lần tiếp theo người chơi mở ra.</string>
+    <string name="mobile_settings_player_buttons_note">Các nút bị ẩn sẽ tắt trên mọi video. Thay đổi sẽ có hiệu lực vào lần tiếp theo mở trình phát.</string>
     <string name="mobile_settings_player_buttons_top">Thanh trên cùng</string>
     <string name="mobile_settings_player_buttons_center">trung tâm</string>
     <string name="mobile_settings_player_buttons_fullscreen">Hành động toàn màn hình</string>
@@ -150,7 +150,7 @@
     <string name="mobile_watch_queue_from">Đang phát từ%1$s</string>
     <string name="mobile_watch_queue_position" translatable="false">%1$d/%2$d</string>
     <string name="mobile_watch_queue_fallback">xếp hàng</string>
-    <string name="mobile_watch_queue_now_playing">Đang chơi</string>
+    <string name="mobile_watch_queue_now_playing">Đang phát</string>
     <string name="mobile_watch_description">Mô tả</string>
     <string name="mobile_description_likes">Lượt thích</string>
     <string name="mobile_description_views">Lượt xem</string>
@@ -181,10 +181,10 @@
     <string name="mobile_comments_none">Chưa có bình luận nào</string>
     <string name="mobile_comments_load_error">Không thể tải nhận xét.</string>
     <string name="mobile_comments_replies_load_error">Không thể tải câu trả lời.</string>
-    <string name="mobile_comments_sort_top">hàng đầu</string>
-    <string name="mobile_comments_sort_top_hint">Thích nhất đầu tiên</string>
+    <string name="mobile_comments_sort_top">Hàng đầu</string>
+    <string name="mobile_comments_sort_top_hint">Nhiều lượt thích nhất</string>
     <string name="mobile_comments_sort_newest">Mới nhất</string>
-    <string name="mobile_comments_sort_newest_hint">Bao gồm thư rác có thể</string>
+    <string name="mobile_comments_sort_newest_hint">Bao gồm cả bình luận rác/spam</string>
     <string name="mobile_comments_sort_description">Sắp xếp bình luận:%1$s</string>
     <string name="mobile_comments_close">Đóng bình luận</string>
     <string name="mobile_comments_back">Quay lại nhận xét</string>
@@ -325,7 +325,7 @@
     <string name="mobile_page_load_error">Không thể tải trang này.</string>
     <string name="mobile_load_more_error">Không thể tải thêm.</string>
     <string name="mobile_refresh_error">Không thể làm mới.</string>
-    <string name="mobile_mini_play_pause">Chơi hoặc tạm dừng</string>
+    <string name="mobile_mini_play_pause">Phát hoặc tạm dừng</string>
     <string name="mobile_mini_expand">Mở rộng trình phát</string>
     <string name="pin_playlist">Lưu danh sách phát cho bạn</string>
     <string name="pin_channel">Ghim kênh cho bạn</string>
@@ -349,9 +349,9 @@
     <string name="mobile_settings_gestures">Cử chỉ</string>
     <string name="mobile_settings_gesture_levels">Vuốt để điều chỉnh độ sáng và âm lượng</string>
     <string name="mobile_settings_gesture_levels_summary">Lên và xuống ở bên trái hoặc bên phải của video toàn màn hình</string>
-    <string name="mobile_settings_gesture_seek">Vuốt để tìm kiếm</string>
-    <string name="mobile_settings_gesture_seek_summary">Nằm ngang trên video</string>
-    <string name="mobile_settings_double_tap_seek">Nhấn đúp để tìm kiếm</string>
+    <string name="mobile_settings_gesture_seek">Vuốt để tua video</string>
+    <string name="mobile_settings_gesture_seek_summary">Vuốt ngang trên video để tua tiến/lùi</string>
+    <string name="mobile_settings_double_tap_seek">Nhấn đúp để tua</string>
     <string name="subscribed_to_channel">Đã đăng ký</string>
     <string name="unsubscribed_from_channel">Hủy đăng ký</string>
     <string name="mobile_player_settings">Cài đặt</string>
@@ -583,14 +583,14 @@
     </plurals>
     <string name="mobile_about_tv_badge">MỚI</string>
     <string name="mobile_about_tv_title">PlayTube TV đã có mặt 📺</string>
-    <string name="mobile_about_tv_text">Mọi thứ bạn yêu thích đều ở đây, giờ đã có trên màn hình lớn. Thanh bên bằng kính, Video ngắn phát sáng trên thẻ riêng và đăng nhập bằng mã. Chiếc ghế dài của bạn đang gọi.</string>
+    <string name="mobile_about_tv_text">Mọi thứ bạn yêu thích đều ở đây, giờ đã có trên màn hình lớn. Thanh bên hiệu ứng kính mờ, thẻ Shorts phát sáng và đăng nhập tiện lợi bằng mã liên kết. Hãy bật TV và thưởng thức ngay.</string>
     <string name="mobile_about_tv_button">Cài đặt trên TV của tôi</string>
     <string name="mobile_about_tv_repo">⭐ Gắn dấu sao trên GitHub hoặc tự tải xuống APK</string>
     <string name="mobile_about_tv_repo_url" translatable="false">github.com/yashoncode/playtube-tv</string>
     <string name="mobile_about_tv_shot">Trang chủ của PlayTube TV trên TV</string>
-    <string name="mobile_about_reporters">phóng viên số báo</string>
-    <string name="mobile_about_reporters_summary">Cảm ơn tất cả các phóng viên vấn đề</string>
-    <string name="mobile_about_reporters_note">Cảm ơn tất cả những người đã mở một vấn đề. Mọi báo cáo và ý tưởng đều khiến PlayTube trở nên tốt hơn.</string>
+    <string name="mobile_about_reporters">Người báo cáo sự cố</string>
+    <string name="mobile_about_reporters_summary">Cảm ơn mọi người đã báo cáo lỗi &amp; đóng góp ý kiến</string>
+    <string name="mobile_about_reporters_note">Cảm ơn tất cả những người đã tạo Issue trên GitHub. Mọi báo cáo và ý kiến đóng góp đều giúp PlayTube hoàn thiện hơn.</string>
     <string name="mobile_about_reporters_loading">Đang tải từ GitHub…</string>
     <string name="mobile_about_reporters_failed">Không thể tải danh sách từ GitHub. Kiểm tra kết nối của bạn và mở lại trang này.</string>
     <plurals name="mobile_about_reporters_count">
@@ -612,7 +612,7 @@
     <string name="sabr_vod_option">Ưu tiên SABR ngay cả khi liên kết hoạt động (thử nghiệm; VOD tiếp theo)</string>
     <string name="sabr_vod_stopped">Quá trình phát lại SABR thử nghiệm đã dừng. Nhấn vào phát để thử lại hoặc tắt SABR trong Cài đặt.</string>
     <string name="mobile_next_in">Tiếp theo trong%1$d</string>
-    <string name="mobile_next_play">Chơi ngay</string>
+    <string name="mobile_next_play">Phát ngay</string>
     <string name="mobile_next_cancel">Hủy bỏ</string>
     <string name="mobile_shorts_mute">Tắt tiếng</string>
     <string name="mobile_shorts_unmute">Bật tiếng</string>
