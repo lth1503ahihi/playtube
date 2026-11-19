@@ -12,14 +12,14 @@
     <string name="mobile_settings_account_signed_out">Chưa đăng nhập · Đăng nhập để xem kênh đăng ký</string>
     <string name="mobile_settings_account_switch">Chuyển đổi hoặc quản lý tài khoản</string>
     <string name="mobile_settings_group_app">Ứng dụng</string>
-    <string name="mobile_settings_group_video">Video & Âm thanh</string>
+    <string name="mobile_settings_group_video">Video &amp; Âm thanh</string>
     <string name="mobile_settings_group_other">Khác</string>
     <string name="mobile_settings_general">Cài đặt chung</string>
     <string name="mobile_settings_general_summary">Ngôn ngữ, quốc gia, tìm kiếm giọng nói, đồng hồ</string>
     <string name="mobile_settings_customize">Tùy biến giao diện</string>
     <string name="mobile_settings_downloads_summary">Thư mục lưu, chất lượng mặc định, tải qua Wi-Fi</string>
     <string name="mobile_settings_audio_quality">Chất lượng âm thanh</string>
-    <string name="mobile_settings_backup">Sao lưu & Khôi phục</string>
+    <string name="mobile_settings_backup">Sao lưu &amp; Khôi phục</string>
     <string name="mobile_settings_backup_summary">Xuất hoặc nhập lại cấu hình cài đặt của bạn</string>
     <string name="mobile_settings_about">Thông tin ứng dụng</string>
     <string name="mobile_settings_language">Ngôn ngữ</string>
