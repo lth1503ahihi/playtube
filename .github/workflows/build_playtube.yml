@@ -1,0 +1,40 @@
+name: Build PlayTube APK
+
+on:
+  workflow_dispatch: # Cho phép bấm nút build bất kỳ lúc nào
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build PlayTube
+        run: |
+          chmod +x gradlew
+          ./gradlew :mobile:assembleStmobileDebug
+
+      - name: Collect APKs
+        run: |
+          mkdir -p dist
+          find mobile/build/outputs/apk/ -name "*.apk" -exec cp {} dist/ \;
+          ls -lh dist/
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PlayTube-arm64
+          path: dist/*.apk
