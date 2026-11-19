@@ -22,6 +22,21 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - name: Build Rust DSP Core
+        run: |
+          cargo install cargo-ndk
+          NDK_DIR=$(find ${ANDROID_HOME:-/usr/local/lib/android/sdk}/ndk -maxdepth 1 -mindepth 1 2>/dev/null | sort -V | tail -n 1)
+          echo "Using NDK: $NDK_DIR"
+          export ANDROID_NDK_HOME="$NDK_DIR"
+          mkdir -p mobile/src/stmobile/jniLibs
+          cargo ndk --platform 24 -t arm64-v8a -o mobile/src/stmobile/jniLibs build --release --manifest-path native/playtube-core/Cargo.toml
+          ls -lh mobile/src/stmobile/jniLibs/arm64-v8a/
+
       - name: Build PlayTube Debug
         run: |
           chmod +x gradlew
@@ -45,5 +60,5 @@ jobs:
         run: |
           TAG="v1.0.${{ github.run_number }}"
           gh release create "$TAG" dist/PlayTube_arm64-v8a.apk \
-            --title "PlayTube $TAG (Tiếng Việt & English)" \
-            --notes "Bản build PlayTube arm64-v8a dành cho điện thoại Android (LG G8X / Evolution X) hỗ trợ Full Tiếng Việt."
+            --title "PlayTube $TAG (Rust DSP Core & Full Tiếng Việt)" \
+            --notes "Bản build PlayTube arm64-v8a tích hợp PlayTube Rust DSP Core (ARM64 SIMD) tăng tốc Spatial Audio & HRTF, kèm Full Tiếng Việt 100%."

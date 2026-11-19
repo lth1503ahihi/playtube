@@ -141,6 +141,7 @@ public final class MeeTuneSpatial {
         private int mHistoryPos;
         private int[] mTapsL = new int[0];
         private int[] mTapsR = new int[0];
+        private long mNativeHandle = 0L;
 
         @Override
         protected AudioFormat onConfigure(AudioFormat format) {
@@ -173,6 +174,12 @@ public final class MeeTuneSpatial {
             mHistory = new float[samples(TAPS_R_MS, rate)[TAPS_R_MS.length - 1] + 1];
             mHistoryPos = 0;
             mSideLow = mBassLow = mRoomLow = 0f;
+            if (PlayTuneNative.isLoaded()) {
+                if (mNativeHandle != 0L) {
+                    PlayTuneNative.destroySpatialEngine(mNativeHandle);
+                }
+                mNativeHandle = PlayTuneNative.createSpatialEngine(rate);
+            }
         }
 
         @Override
@@ -180,6 +187,10 @@ public final class MeeTuneSpatial {
             mWet = 0f;
             mBassWet = 0f;
             mSurround = mPendingSurround = false;
+            if (mNativeHandle != 0L) {
+                PlayTuneNative.destroySpatialEngine(mNativeHandle);
+                mNativeHandle = 0L;
+            }
         }
 
         private static float onePole(int rate, double hz) {
@@ -224,6 +235,17 @@ public final class MeeTuneSpatial {
                 }
                 output.flip();
                 return;
+            }
+
+            // High-performance Rust SIMD acceleration for 16-bit stereo PCM
+            if (mNativeHandle != 0L && !mFloat && !mSurround && input.isDirect() && output.isDirect()) {
+                int processed = PlayTuneNative.processPcm16(mNativeHandle, input, output, size, goal, bassGoal);
+                if (processed > 0) {
+                    input.position(input.position() + processed);
+                    output.position(output.position() + processed);
+                    output.flip();
+                    return;
+                }
             }
             int taps = mMidTaps.length;
             while (input.remaining() >= frameBytes) {
