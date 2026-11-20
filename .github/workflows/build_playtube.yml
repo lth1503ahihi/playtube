@@ -62,9 +62,9 @@ jobs:
         run: |
           TAG="v1.0.${{ github.run_number }}"
           gh release create "$TAG" dist/PlayTube_arm64-v8a.apk \
-            --title "PlayTube $TAG (YouTube-Style Splash + Voice Search Tiếng Việt + 120Hz)" \
+            --title "PlayTube $TAG (MeeTube Frosted Glass Splash + Voice Search Tiếng Việt + 120Hz)" \
             --notes "Bản build PlayTube arm64-v8a tối ưu toàn diện:
-            - YouTube-style Launch Splash: Giao diện mở app tối giản, sang trọng chuẩn YouTube với logo chính giữa và hiệu ứng hòa tan crossfade mượt mà vào trang chủ.
+            - MeeTube Frosted Glass Splash: Khôi phục hiệu ứng mở app chuyển kính mờ (Frosted Glass) đặc trưng, mượt mà và độc đáo của MeeTube.
             - Hỗ trợ Tìm kiếm bằng giọng nói Tiếng Việt (vi-VN) chuẩn xác, nhận diện tự nhiên cả tiếng Việt và các từ khóa bài hát/ca sĩ tiếng Anh.
             - Mặc định kích hoạt High Refresh Rate (90Hz / 120Hz) cho trải nghiệm lướt cực êm.
             - Cronet Buffer tăng lên 64KB (gấp đôi tốc độ nạp dữ liệu stream video/audio).
