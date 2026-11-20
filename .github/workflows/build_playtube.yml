@@ -62,13 +62,14 @@ jobs:
         run: |
           TAG="v1.0.${{ github.run_number }}"
           gh release create "$TAG" dist/PlayTube_arm64-v8a.apk \
-            --title "PlayTube $TAG (Animated Splash + 120Hz Smooth + Rust DSP + Video Speed)" \
+            --title "PlayTube $TAG (YouTube-Style Splash + Voice Search Tiếng Việt + 120Hz)" \
             --notes "Bản build PlayTube arm64-v8a tối ưu toàn diện:
-            - Animated Splash Screen: Logo PlayTube trái tim bung nảy Overshoot + hiệu ứng Heartbeat đập nhẹ + Vòng hào quang đỏ glowing aura + Title mượt mà khi mở app.
+            - YouTube-style Launch Splash: Giao diện mở app tối giản, sang trọng chuẩn YouTube với logo chính giữa và hiệu ứng hòa tan crossfade mượt mà vào trang chủ.
+            - Hỗ trợ Tìm kiếm bằng giọng nói Tiếng Việt (vi-VN) chuẩn xác, nhận diện tự nhiên cả tiếng Việt và các từ khóa bài hát/ca sĩ tiếng Anh.
             - Mặc định kích hoạt High Refresh Rate (90Hz / 120Hz) cho trải nghiệm lướt cực êm.
             - Cronet Buffer tăng lên 64KB (gấp đôi tốc độ nạp dữ liệu stream video/audio).
             - Ưu tiên phần cứng giải mã (Hardware VP9 & H264 codec priority) giúp thiết bị mát mẻ, tiết kiệm pin, phát video mượt mà.
-            - RecyclerView View Cache tăng lên 16 items cho cuộn trang 120Hz siêu mượt (zero dropped frames).
+            - RecyclerView View Cache 16 items cho cuộn trang 120Hz siêu mượt (zero dropped frames).
             - Tích hợp Rust Native DSP Core (ARM64 SIMD) BS2B Binaural Spatial Audio, Psychoacoustic Bass Exciter & Soft-Knee Peak Limiter.
             - Tối ưu Start Buffer 250ms (giảm 50% TTFF) & Preload 4s video tiếp theo (0ms chuyển bài).
             - 100% Tiếng Việt tự nhiên chuẩn xác."

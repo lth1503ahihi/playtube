@@ -1276,9 +1276,21 @@ public class MobileSearchActivity extends MobileActivity
 
     private void launchVoiceRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.mobile_search_hint));
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, java.util.Locale.getDefault().toString());
+
+        // PLAYTUBE: prioritize Vietnamese ("vi-VN") so speech recognition works naturally in Vietnamese & English
+        java.util.Locale current = getResources().getConfiguration().getLocales().get(0);
+        String voiceLang = "vi-VN";
+        if (current != null && !current.getLanguage().equals("vi") && !current.getLanguage().equals("en")) {
+            voiceLang = current.toLanguageTag();
+        }
+
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, voiceLang);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, voiceLang);
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, false);
+        intent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{voiceLang, "vi-VN", "en-US"});
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
 
         try {
             startActivityForResult(intent, REQUEST_VOICE);
