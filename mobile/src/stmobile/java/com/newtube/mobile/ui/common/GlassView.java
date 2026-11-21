@@ -53,7 +53,7 @@ import java.util.Random;
  * Children draw on top, unrefracted. Wire it with {@link #setSource}.
  */
 public class GlassView extends FrameLayout {
-    private static final float BLUR_DP = 8f;
+    private static final float BLUR_DP = 6f;
     /** How far past an edge {@link #setBlurReach} looks: the blur's whole kernel. */
     public static final float BLUR_REACH_DP = 2 * BLUR_DP;
     private static final float SATURATION = 1.5f;
@@ -109,36 +109,16 @@ public class GlassView extends FrameLayout {
             + "    float2 grad = normalize(gradSdRoundedRect(centeredCoord, halfSize, gradRadius)"
             + " + depthEffect * normalize(centeredCoord));\n"
             + "    float2 refractedCoord = coord + d * grad;\n"
+            + "    if (chromaticAberration <= 0.05) {\n"
+            + "        return content.eval(refractedCoord);\n"
+            + "    }\n"
             + "    float dispersionIntensity = chromaticAberration"
             + " * ((centeredCoord.x * centeredCoord.y) / (halfSize.x * halfSize.y));\n"
             + "    float2 dispersedCoord = d * grad * dispersionIntensity;\n"
-            + "    half4 color = half4(0.0);\n"
             + "    half4 red = content.eval(refractedCoord + dispersedCoord);\n"
-            + "    color.r += red.r / 3.5;\n"
-            + "    color.a += red.a / 7.0;\n"
-            + "    half4 orange = content.eval(refractedCoord + dispersedCoord * (2.0 / 3.0));\n"
-            + "    color.r += orange.r / 3.5;\n"
-            + "    color.g += orange.g / 7.0;\n"
-            + "    color.a += orange.a / 7.0;\n"
-            + "    half4 yellow = content.eval(refractedCoord + dispersedCoord * (1.0 / 3.0));\n"
-            + "    color.r += yellow.r / 3.5;\n"
-            + "    color.g += yellow.g / 3.5;\n"
-            + "    color.a += yellow.a / 7.0;\n"
             + "    half4 green = content.eval(refractedCoord);\n"
-            + "    color.g += green.g / 3.5;\n"
-            + "    color.a += green.a / 7.0;\n"
-            + "    half4 cyan = content.eval(refractedCoord - dispersedCoord * (1.0 / 3.0));\n"
-            + "    color.g += cyan.g / 3.5;\n"
-            + "    color.b += cyan.b / 3.0;\n"
-            + "    color.a += cyan.a / 7.0;\n"
-            + "    half4 blue = content.eval(refractedCoord - dispersedCoord * (2.0 / 3.0));\n"
-            + "    color.b += blue.b / 3.0;\n"
-            + "    color.a += blue.a / 7.0;\n"
-            + "    half4 purple = content.eval(refractedCoord - dispersedCoord);\n"
-            + "    color.r += purple.r / 7.0;\n"
-            + "    color.b += purple.b / 3.0;\n"
-            + "    color.a += purple.a / 7.0;\n"
-            + "    return color;\n"
+            + "    half4 blue = content.eval(refractedCoord - dispersedCoord);\n"
+            + "    return half4(red.r, green.g, blue.b, (red.a + green.a + blue.a) * 0.3333);\n"
             + "}\n";
 
     private static final String HIGHLIGHT_AGSL =
@@ -457,8 +437,8 @@ public class GlassView extends FrameLayout {
         lens.setFloatUniform("radius", radius(w, h));
         lens.setFloatUniform("refractionHeight", REFRACTION_HEIGHT_DP * mDensity);
         lens.setFloatUniform("refractionAmount", -REFRACTION_AMOUNT_DP * mDensity);
-        lens.setFloatUniform("depthEffect", 1f);
-        lens.setFloatUniform("chromaticAberration", 1f);
+        lens.setFloatUniform("depthEffect", 0.6f);
+        lens.setFloatUniform("chromaticAberration", 0f);
         return RenderEffect.createChainEffect(RenderEffect.createRuntimeShaderEffect(lens, "content"), frost);
     }
 

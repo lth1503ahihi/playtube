@@ -96,7 +96,7 @@ final class ShortsOverlay {
 
     private static final long OUT_MS = 220;
     private static final long IN_MS = 240;
-    private static final float FLING_PX_PER_S = 1200f;
+    private static final float FLING_PX_PER_S = 650f;
     /** No neighbour to page to: the drag gives a quarter of the finger's travel. */
     private static final float RUBBER_BAND = 0.25f;
     /**
@@ -578,16 +578,32 @@ final class ShortsOverlay {
             showPeek(dir);
         }
         mVideo.animate().cancel();
-        mVideo.setTranslationY(mPeekVideo != null ? dy : dy * RUBBER_BAND);
+        float videoY = mPeekVideo != null ? dy : dy * RUBBER_BAND;
+        mVideo.setTranslationY(videoY);
+        if (mPeekVideo != null && mPeek.getVisibility() == View.VISIBLE) {
+            float height = mVideo.getHeight();
+            float peekY = (dir > 0 ? height : -height) + dy;
+            mPeek.setTranslationY(peekY);
+            if (mPeekCoverId == null && mPeekFrame.getTranslationY() != PARKED) {
+                mPeekFrame.setTranslationY(peekY);
+            }
+        }
     }
 
     void release(float dy, float yVelocity) {
         float height = Math.max(1, mVideo.getHeight());
-        boolean far = Math.abs(dy) > height * 0.18f;
+        boolean far = Math.abs(dy) > height * 0.12f;
         boolean fling = Math.abs(yVelocity) > FLING_PX_PER_S && Math.signum(yVelocity) == Math.signum(dy);
         if (dy == 0 || mPeekVideo == null || !(far || fling)) {
             mVideo.animate().translationY(0f).setDuration(IN_MS).setInterpolator(new DecelerateInterpolator())
                     .withEndAction(this::hidePeek).start();
+            if (mPeekVideo != null && mPeek.getVisibility() == View.VISIBLE) {
+                float snapPeekY = mPeekDir > 0 ? height : -height;
+                mPeek.animate().translationY(snapPeekY).setDuration(IN_MS).setInterpolator(new DecelerateInterpolator()).start();
+                if (mPeekCoverId == null && mPeekFrame.getTranslationY() != PARKED) {
+                    mPeekFrame.animate().translationY(snapPeekY).setDuration(IN_MS).setInterpolator(new DecelerateInterpolator()).start();
+                }
+            }
             return;
         }
         boolean next = dy < 0;
@@ -604,6 +620,12 @@ final class ShortsOverlay {
         mVideo.animate().translationY(next ? -height : height).setDuration(duration)
                 .setInterpolator(new DecelerateInterpolator())
                 .withEndAction(this::endPaging).start();
+        mPeek.animate().translationY(0f).setDuration(duration)
+                .setInterpolator(new DecelerateInterpolator()).start();
+        if (mPeekCoverId == null && mPeekFrame.getTranslationY() != PARKED) {
+            mPeekFrame.animate().translationY(0f).setDuration(duration)
+                    .setInterpolator(new DecelerateInterpolator()).start();
+        }
     }
 
     /**

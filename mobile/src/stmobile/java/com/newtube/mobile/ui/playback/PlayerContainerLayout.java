@@ -208,10 +208,10 @@ public class PlayerContainerLayout extends FrameLayout {
     static int directionOf(float dx, float dy, float slop) {
         float ax = Math.abs(dx);
         float ay = Math.abs(dy);
-        if (ay > slop && ay > ax * 1.5f) {
+        if (ay > slop && ay > ax * 1.2f) {
             return dy > 0 ? DOWN : UP;
         }
-        if (ax > slop && ax > ay * 1.5f) {
+        if (ax > slop && ax > ay * 1.2f) {
             return dx > 0 ? RIGHT : LEFT;
         }
         return 0;
@@ -245,7 +245,7 @@ public class PlayerContainerLayout extends FrameLayout {
                     }
                     float dx = rawX(ev, index) - mDownRawX;
                     float dy = rawY(ev, index) - mDownRawY;
-                    int direction = directionOf(dx, dy, mTouchSlop * 2);
+                    int direction = directionOf(dx, dy, mTouchSlop);
                     if (direction != 0) {
                         mUndecided = false;
                         mSwipe = mListener.onSwipeStart(direction, mDownRawX, mDownRawY, dx, dy);

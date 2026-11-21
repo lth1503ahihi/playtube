@@ -325,8 +325,8 @@ public final class NavLens extends View {
             lens.setFloatUniform("radius", Math.min(w, h) / 2f);
             lens.setFloatUniform("refractionHeight", REFRACTION_DP * mDensity);
             lens.setFloatUniform("refractionAmount", -REFRACTION_DP * mDensity);
-            lens.setFloatUniform("depthEffect", 1f);
-            lens.setFloatUniform("chromaticAberration", 1f);
+            lens.setFloatUniform("depthEffect", 0.6f);
+            lens.setFloatUniform("chromaticAberration", 0f);
             mNode.setRenderEffect(RenderEffect.createRuntimeShaderEffect(lens, "content"));
         }
         // The bar as it sits under the lens, magnified about the lens centre. The view's own scale

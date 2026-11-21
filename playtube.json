@@ -9,8 +9,12 @@
     ],
     "downloadSize": 49206829
   },
-  "3.5.8": {
-    "versionCode": 30508,
-    "changelog": []
+  "3.5.9": {
+    "versionCode": 30509,
+    "changelog": [
+      "Tối ưu độ nhạy vuốt Shorts: loại bỏ độ trễ cử chỉ, chuyển video tức thì",
+      "Đồng bộ hoạt cảnh xem trước Shorts 1:1 theo ngón tay siêu mượt",
+      "Tối ưu AGSL Shader & Blur trên GlassView, giảm tải GPU chống giật khung hình khi cuộn"
+    ]
   }
 }
