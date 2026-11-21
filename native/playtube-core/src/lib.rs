@@ -1,12 +1,37 @@
 use jni::objects::{JByteArray, JByteBuffer, JClass, JLongArray, JString};
 use jni::sys::{jboolean, jfloat, jint, jlong, jlongArray, jobjectArray, jstring, JNI_TRUE};
 use jni::JNIEnv;
+use std::collections::HashMap;
 use std::f32::consts::PI;
+use std::sync::atomic::{AtomicI64, Ordering};
+use std::sync::{Arc, Mutex, OnceLock, RwLock};
 
 mod dsp;
 mod hrtf;
 pub mod lyrics;
 pub mod sponsorblock;
+
+static NEXT_HANDLE: AtomicI64 = AtomicI64::new(1);
+
+fn next_handle_id() -> jlong {
+    NEXT_HANDLE.fetch_add(1, Ordering::Relaxed)
+}
+
+fn spatial_registry() -> &'static Mutex<HashMap<jlong, Arc<Mutex<SpatialEngine>>>> {
+    static REGISTRY: OnceLock<Mutex<HashMap<jlong, Arc<Mutex<SpatialEngine>>>>> = OnceLock::new();
+    REGISTRY.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
+fn lyrics_registry() -> &'static Mutex<HashMap<jlong, Arc<lyrics::LrcTimeline>>> {
+    static REGISTRY: OnceLock<Mutex<HashMap<jlong, Arc<lyrics::LrcTimeline>>>> = OnceLock::new();
+    REGISTRY.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
+fn sponsor_registry() -> &'static Mutex<HashMap<jlong, Arc<RwLock<sponsorblock::SponsorTimeline>>>> {
+    static REGISTRY: OnceLock<Mutex<HashMap<jlong, Arc<RwLock<sponsorblock::SponsorTimeline>>>>> =
+        OnceLock::new();
+    REGISTRY.get_or_init(|| Mutex::new(HashMap::new()))
+}
 
 const TAPS_L_MS: [f32; 4] = [8.3, 14.9, 22.1, 33.7];
 const TAPS_R_MS: [f32; 4] = [10.1, 17.3, 26.9, 38.9];
@@ -30,6 +55,67 @@ fn soft(x: f32) -> f32 {
     }
 }
 
+#[inline(always)]
+fn dot_product_f32(a: &[f32], b: &[f32]) -> f32 {
+    debug_assert_eq!(a.len(), b.len());
+    #[cfg(target_arch = "aarch64")]
+    {
+        // Safety: aarch64 always has NEON; lengths are asserted equal.
+        unsafe { dot_product_neon(a, b) }
+    }
+    #[cfg(not(target_arch = "aarch64"))]
+    {
+        let mut sum = 0.0f32;
+        for i in 0..a.len() {
+            sum += a[i] * b[i];
+        }
+        sum
+    }
+}
+
+#[cfg(target_arch = "aarch64")]
+#[inline]
+unsafe fn dot_product_neon(a: &[f32], b: &[f32]) -> f32 {
+    use std::arch::aarch64::*;
+    let len = a.len();
+    let mut i = 0usize;
+    let mut acc = vdupq_n_f32(0.0);
+    let pa = a.as_ptr();
+    let pb = b.as_ptr();
+    while i + 4 <= len {
+        let va = vld1q_f32(pa.add(i));
+        let vb = vld1q_f32(pb.add(i));
+        acc = vfmaq_f32(acc, va, vb);
+        i += 4;
+    }
+    let mut sum = vaddvq_f32(acc);
+    while i < len {
+        sum += *pa.add(i) * *pb.add(i);
+        i += 1;
+    }
+    sum
+}
+
+/// Linearly resamples a 48 kHz impulse response to `target_rate` once at initialization.
+fn resample_ir(src: &[f32], src_rate: f64, target_rate: f64) -> Vec<f32> {
+    if src.is_empty() {
+        return Vec::new();
+    }
+    let ratio = target_rate / src_rate;
+    let out_len = ((src.len() as f64) * ratio).round().max(1.0) as usize;
+    let mut out = Vec::with_capacity(out_len);
+    let scale = (1.0 / ratio) as f32;
+    for i in 0..out_len {
+        let pos = (i as f64) / ratio;
+        let idx = pos.floor() as usize;
+        let frac = (pos - idx as f64) as f32;
+        let s0 = src[idx.min(src.len() - 1)];
+        let s1 = src[(idx + 1).min(src.len() - 1)];
+        out.push((s0 + (s1 - s0) * frac) * scale);
+    }
+    out
+}
+
 pub struct SpatialEngine {
     #[allow(dead_code)]
     rate: i32,
@@ -37,8 +123,8 @@ pub struct SpatialEngine {
     bass_coef: f32,
     low_coef: f32,
     room_coef: f32,
-    mid_taps: &'static [f32],
-    side_taps: &'static [f32],
+    mid_taps_rev: Vec<f32>,
+    side_taps_rev: Vec<f32>,
     mid_ring: Vec<f32>,
     side_ring: Vec<f32>,
     ring_pos: usize,
@@ -57,12 +143,26 @@ pub struct SpatialEngine {
 }
 
 impl SpatialEngine {
-    pub fn new(rate: i32) -> Self {
-        let (mid_taps, side_taps) = if rate == 44100 {
-            (hrtf::MID_44100.as_slice(), hrtf::SIDE_44100.as_slice())
+    pub fn new(sample_rate: i32) -> Self {
+        let rate = if sample_rate <= 0 {
+            48000
         } else {
-            (hrtf::MID_48000.as_slice(), hrtf::SIDE_48000.as_slice())
+            sample_rate.clamp(8000, 192000)
         };
+
+        let (mut mid_taps_rev, mut side_taps_rev) = if rate == 44100 {
+            (hrtf::MID_44100.to_vec(), hrtf::SIDE_44100.to_vec())
+        } else if rate == 48000 {
+            (hrtf::MID_48000.to_vec(), hrtf::SIDE_48000.to_vec())
+        } else {
+            (
+                resample_ir(&hrtf::MID_48000, 48000.0, rate as f64),
+                resample_ir(&hrtf::SIDE_48000, 48000.0, rate as f64),
+            )
+        };
+        // Reverse once so FIR convolution reads forward-contiguous slices
+        mid_taps_rev.reverse();
+        side_taps_rev.reverse();
 
         let glide = 1.0 - (-1.0 / (0.05 * (rate as f64))).exp() as f32;
         let bass_coef = one_pole(rate, 200.0);
@@ -72,14 +172,14 @@ impl SpatialEngine {
         let mut taps_l = [0usize; 4];
         let mut taps_r = [0usize; 4];
         for i in 0..4 {
-            taps_l[i] = ((TAPS_L_MS[i] / 1000.0) * (rate as f32)).round() as usize;
-            taps_r[i] = ((TAPS_R_MS[i] / 1000.0) * (rate as f32)).round() as usize;
+            taps_l[i] = ((TAPS_L_MS[i] / 1000.0) * (rate as f32)).round().max(1.0) as usize;
+            taps_r[i] = ((TAPS_R_MS[i] / 1000.0) * (rate as f32)).round().max(1.0) as usize;
         }
 
         let max_tap = taps_r[3];
         let history = vec![0.0f32; max_tap + 1];
 
-        let taps_len = mid_taps.len();
+        let taps_len = mid_taps_rev.len();
         let mid_ring = vec![0.0f32; 2 * taps_len];
         let side_ring = vec![0.0f32; 2 * taps_len];
 
@@ -93,8 +193,8 @@ impl SpatialEngine {
             bass_coef,
             low_coef,
             room_coef,
-            mid_taps,
-            side_taps,
+            mid_taps_rev,
+            side_taps_rev,
             mid_ring,
             side_ring,
             ring_pos: 0,
@@ -142,23 +242,19 @@ impl SpatialEngine {
         let mut wide = self.side_low + (side_dry - self.side_low) * (1.0 + 0.9 * w);
         let mut mid = mid_dry;
 
-        let taps = self.mid_taps.len();
+        let taps = self.mid_taps_rev.len();
         self.mid_ring[self.ring_pos] = mid;
         self.mid_ring[self.ring_pos + taps] = mid;
         self.side_ring[self.ring_pos] = wide;
         self.side_ring[self.ring_pos + taps] = wide;
 
         let head = (2.0 * w).min(1.0);
-        if head > 0.0 {
-            let mut hm = 0.0f32;
-            let mut hs = 0.0f32;
-            let r_idx = self.ring_pos + taps;
-            // Vectorized FIR convolution
-            for k in 0..taps {
-                let idx = r_idx - k;
-                hm += self.mid_taps[k] * self.mid_ring[idx];
-                hs += self.side_taps[k] * self.side_ring[idx];
-            }
+        if head > 0.0 && taps > 0 {
+            let start = self.ring_pos + 1;
+            let end = start + taps;
+            // Contiguous forward-slice FIR convolution (explicit NEON on aarch64)
+            let hm = dot_product_f32(&self.mid_taps_rev, &self.mid_ring[start..end]);
+            let hs = dot_product_f32(&self.side_taps_rev, &self.side_ring[start..end]);
             mid += (hm - mid) * head;
             wide += (hs - wide) * head;
         }
@@ -213,9 +309,17 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getVers
     env: JNIEnv<'local>,
     _class: JClass<'local>,
 ) -> jstring {
-    let output = env.new_string("PlayTube Rust DSP Core v1.0.0 (ARM64 SIMD)")
-        .expect("Couldn't create java string");
-    output.into_raw()
+    let ver = if cfg!(target_arch = "aarch64") {
+        "PlayTube Rust Core v1.1.0 (ARM64 NEON)"
+    } else if cfg!(target_arch = "arm") {
+        "PlayTube Rust Core v1.1.0 (ARMv7)"
+    } else {
+        "PlayTube Rust Core v1.1.0"
+    };
+    match env.new_string(ver) {
+        Ok(s) => s.into_raw(),
+        Err(_) => std::ptr::null_mut(),
+    }
 }
 
 #[no_mangle]
@@ -224,8 +328,14 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_createS
     _class: JClass,
     sample_rate: jint,
 ) -> jlong {
-    let engine = Box::new(SpatialEngine::new(sample_rate));
-    Box::into_raw(engine) as jlong
+    let id = next_handle_id();
+    let engine = Arc::new(Mutex::new(SpatialEngine::new(sample_rate)));
+    if let Ok(mut map) = spatial_registry().lock() {
+        map.insert(id, engine);
+        id
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -234,9 +344,9 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_destroy
     _class: JClass,
     handle: jlong,
 ) {
-    if handle != 0 {
-        unsafe {
-            drop(Box::from_raw(handle as *mut SpatialEngine));
+    if handle > 0 {
+        if let Ok(mut map) = spatial_registry().lock() {
+            map.remove(&handle);
         }
     }
 }
@@ -247,9 +357,17 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_resetSp
     _class: JClass,
     handle: jlong,
 ) {
-    if handle != 0 {
-        let engine = unsafe { &mut *(handle as *mut SpatialEngine) };
-        engine.reset();
+    if handle <= 0 {
+        return;
+    }
+    let engine_arc = spatial_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned());
+    if let Some(arc) = engine_arc {
+        if let Ok(mut engine) = arc.lock() {
+            engine.reset();
+        }
     }
 }
 
@@ -264,20 +382,51 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
     goal_amount: jfloat,
     goal_bass: jfloat,
 ) -> jint {
-    if handle == 0 || byte_count <= 0 {
+    if handle <= 0 || byte_count <= 0 {
         return 0;
     }
 
-    let in_addr = env.get_direct_buffer_address(&input_buf);
-    let out_addr = env.get_direct_buffer_address(&output_buf);
+    let usable_bytes = (byte_count as usize) & !3; // stereo 16-bit = 4 bytes/frame
+    if usable_bytes == 0 {
+        return 0;
+    }
 
-    let (in_ptr, out_ptr) = match (in_addr, out_addr) {
+    let in_cap = match env.get_direct_buffer_capacity(&input_buf) {
+        Ok(c) => c,
+        Err(_) => return -1,
+    };
+    let out_cap = match env.get_direct_buffer_capacity(&output_buf) {
+        Ok(c) => c,
+        Err(_) => return -1,
+    };
+    if in_cap < usable_bytes || out_cap < usable_bytes {
+        return -1;
+    }
+
+    let (in_ptr, out_ptr) = match (
+        env.get_direct_buffer_address(&input_buf),
+        env.get_direct_buffer_address(&output_buf),
+    ) {
         (Ok(inp), Ok(outp)) => (inp, outp),
         _ => return -1,
     };
 
-    let engine = unsafe { &mut *(handle as *mut SpatialEngine) };
-    let num_frames = (byte_count as usize) / 4; // 2 channels * 2 bytes
+    let engine_arc = spatial_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned());
+    let arc = match engine_arc {
+        Some(a) => a,
+        None => return -1,
+    };
+    let mut engine = match arc.lock() {
+        Ok(g) => g,
+        Err(_) => return -1,
+    };
+
+    let num_frames = usable_bytes / 4;
+    let amount = if goal_amount.is_finite() { goal_amount.clamp(0.0, 1.5) } else { 0.0 };
+    let bass = if goal_bass.is_finite() { goal_bass.clamp(0.0, 1.5) } else { 0.0 };
 
     unsafe {
         let in_i16 = in_ptr as *const i16;
@@ -287,7 +436,7 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
             let l_raw = *in_i16.add(i * 2) as f32 / 32768.0;
             let r_raw = *in_i16.add(i * 2 + 1) as f32 / 32768.0;
 
-            let (out_l, out_r) = engine.process_frame(l_raw, r_raw, goal_amount, goal_bass);
+            let (out_l, out_r) = engine.process_frame(l_raw, r_raw, amount, bass);
 
             let l_i16 = (out_l * 32767.0).clamp(-32768.0, 32767.0) as i16;
             let r_i16 = (out_r * 32767.0).clamp(-32768.0, 32767.0) as i16;
@@ -297,7 +446,7 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
         }
     }
 
-    byte_count
+    usable_bytes as jint
 }
 
 
@@ -314,8 +463,14 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_parseLr
         Err(_) => return 0,
     };
 
-    let timeline = Box::new(lyrics::LrcTimeline::parse(&lrc_rust));
-    Box::into_raw(timeline) as jlong
+    let id = next_handle_id();
+    let timeline = Arc::new(lyrics::LrcTimeline::parse(&lrc_rust));
+    if let Ok(mut map) = lyrics_registry().lock() {
+        map.insert(id, timeline);
+        id
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -324,9 +479,9 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_destroy
     _class: JClass,
     handle: jlong,
 ) {
-    if handle != 0 {
-        unsafe {
-            drop(Box::from_raw(handle as *mut lyrics::LrcTimeline));
+    if handle > 0 {
+        if let Ok(mut map) = lyrics_registry().lock() {
+            map.remove(&handle);
         }
     }
 }
@@ -338,11 +493,17 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_findAct
     handle: jlong,
     pos_ms: jlong,
 ) -> jint {
-    if handle == 0 || pos_ms < 0 {
+    if handle <= 0 || pos_ms < 0 {
         return -1;
     }
-    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
-    timeline.find_active_index(pos_ms as u64)
+    let timeline = lyrics_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned());
+    match timeline {
+        Some(t) => t.find_active_index(pos_ms as u64),
+        None => -1,
+    }
 }
 
 #[no_mangle]
@@ -351,10 +512,17 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getLrcT
     _class: JClass<'local>,
     handle: jlong,
 ) -> jlongArray {
-    if handle == 0 {
+    if handle <= 0 {
         return std::ptr::null_mut();
     }
-    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
+    let timeline = match lyrics_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned())
+    {
+        Some(t) => t,
+        None => return std::ptr::null_mut(),
+    };
     let times: Vec<i64> = timeline.lines.iter().map(|l| l.time_ms as i64).collect();
 
     match env.new_long_array(times.len() as i32) {
@@ -372,10 +540,17 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getLrcL
     _class: JClass<'local>,
     handle: jlong,
 ) -> jobjectArray {
-    if handle == 0 {
+    if handle <= 0 {
         return std::ptr::null_mut();
     }
-    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
+    let timeline = match lyrics_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned())
+    {
+        Some(t) => t,
+        None => return std::ptr::null_mut(),
+    };
 
     let string_class = match env.find_class("java/lang/String") {
         Ok(c) => c,
@@ -408,8 +583,14 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_createS
     _env: JNIEnv,
     _class: JClass,
 ) -> jlong {
-    let timeline = Box::new(sponsorblock::SponsorTimeline::new());
-    Box::into_raw(timeline) as jlong
+    let id = next_handle_id();
+    let timeline = Arc::new(RwLock::new(sponsorblock::SponsorTimeline::new()));
+    if let Ok(mut map) = sponsor_registry().lock() {
+        map.insert(id, timeline);
+        id
+    } else {
+        0
+    }
 }
 
 #[no_mangle]
@@ -418,9 +599,9 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_destroy
     _class: JClass,
     handle: jlong,
 ) {
-    if handle != 0 {
-        unsafe {
-            drop(Box::from_raw(handle as *mut sponsorblock::SponsorTimeline));
+    if handle > 0 {
+        if let Ok(mut map) = sponsor_registry().lock() {
+            map.remove(&handle);
         }
     }
 }
@@ -435,37 +616,61 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_setSpon
     categories: JByteArray,
     actions: JByteArray,
 ) {
-    if handle == 0 {
+    if handle <= 0 {
         return;
     }
 
-    let len = match env.get_array_length(&starts) {
-        Ok(l) => l as usize,
-        Err(_) => return,
+    let (len_s, len_e, len_c, len_a) = match (
+        env.get_array_length(&starts),
+        env.get_array_length(&ends),
+        env.get_array_length(&categories),
+        env.get_array_length(&actions),
+    ) {
+        (Ok(s), Ok(e), Ok(c), Ok(a)) if s >= 0 && e >= 0 && c >= 0 && a >= 0 => {
+            (s as usize, e as usize, c as usize, a as usize)
+        }
+        _ => return,
     };
 
-    let mut start_vec = vec![0i64; len];
-    let mut end_vec = vec![0i64; len];
-    let mut cat_vec = vec![0i8; len];
-    let mut act_vec = vec![0i8; len];
-
-    let _ = env.get_long_array_region(&starts, 0, &mut start_vec);
-    let _ = env.get_long_array_region(&ends, 0, &mut end_vec);
-    let _ = env.get_byte_array_region(&categories, 0, &mut cat_vec);
-    let _ = env.get_byte_array_region(&actions, 0, &mut act_vec);
-
+    let len = len_s.min(len_e).min(len_c).min(len_a);
     let mut segments = Vec::with_capacity(len);
-    for i in 0..len {
-        segments.push(sponsorblock::SponsorSegment {
-            start_ms: start_vec[i] as u64,
-            end_ms: end_vec[i] as u64,
-            category: cat_vec[i] as u8,
-            action: act_vec[i] as u8,
-        });
+
+    if len > 0 {
+        let mut start_vec = vec![0i64; len];
+        let mut end_vec = vec![0i64; len];
+        let mut cat_vec = vec![0i8; len];
+        let mut act_vec = vec![0i8; len];
+
+        if env.get_long_array_region(&starts, 0, &mut start_vec).is_err()
+            || env.get_long_array_region(&ends, 0, &mut end_vec).is_err()
+            || env.get_byte_array_region(&categories, 0, &mut cat_vec).is_err()
+            || env.get_byte_array_region(&actions, 0, &mut act_vec).is_err()
+        {
+            return;
+        }
+
+        for i in 0..len {
+            if start_vec[i] < 0 || end_vec[i] <= start_vec[i] {
+                continue;
+            }
+            segments.push(sponsorblock::SponsorSegment {
+                start_ms: start_vec[i] as u64,
+                end_ms: end_vec[i] as u64,
+                category: cat_vec[i] as u8,
+                action: act_vec[i] as u8,
+            });
+        }
     }
 
-    let timeline = unsafe { &mut *(handle as *mut sponsorblock::SponsorTimeline) };
-    timeline.set_segments(segments);
+    let timeline_arc = sponsor_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned());
+    if let Some(arc) = timeline_arc {
+        if let Ok(mut timeline) = arc.write() {
+            timeline.set_segments(segments);
+        }
+    }
 }
 
 #[no_mangle]
@@ -475,12 +680,50 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_checkSp
     handle: jlong,
     pos_ms: jlong,
 ) -> jlong {
-    if handle == 0 || pos_ms < 0 {
+    if handle <= 0 || pos_ms < 0 {
         return 0;
     }
-    let timeline = unsafe { &*(handle as *const sponsorblock::SponsorTimeline) };
+    let timeline_arc = sponsor_registry()
+        .lock()
+        .ok()
+        .and_then(|map| map.get(&handle).cloned());
+    let arc = match timeline_arc {
+        Some(a) => a,
+        None => return 0,
+    };
+    let timeline = match arc.read() {
+        Ok(g) => g,
+        Err(_) => return 0,
+    };
     match timeline.check_position(pos_ms as u64) {
         Some((target_ms, _cat, _act)) => target_ms as jlong,
         None => 0,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_spatial_engine_sample_rates_and_reset() {
+        for rate in [0, -1, 32000, 44100, 48000, 96000] {
+            let mut engine = SpatialEngine::new(rate);
+            let (l, r) = engine.process_frame(0.5, -0.5, 0.8, 0.5);
+            assert!(l.is_finite() && r.is_finite());
+            engine.reset();
+            let (l2, r2) = engine.process_frame(0.0, 0.0, 0.0, 0.0);
+            assert_eq!(l2, 0.0);
+            assert_eq!(r2, 0.0);
+        }
+    }
+
+    #[test]
+    fn test_dot_product_f32() {
+        let a = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0];
+        let b = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5];
+        let got = dot_product_f32(&a, &b);
+        let expected: f32 = a.iter().zip(b.iter()).map(|(x, y)| x * y).sum();
+        assert!((got - expected).abs() < 1e-5);
     }
 }

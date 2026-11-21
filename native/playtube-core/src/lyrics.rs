@@ -1,5 +1,5 @@
-/// High-performance, zero-allocation LRC & Synced Lyrics Engine for PlayTube
-/// Parses LRC text 50x-100x faster than Java RegExp without generating Garbage Collection pressure.
+/// High-performance Native LRC & Synced Lyrics Engine for PlayTube
+/// Parses LRC text in native Rust, offloading String/RegExp allocation and GC pressure from the JVM.
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct LrcLine {
@@ -17,10 +17,13 @@ impl LrcTimeline {
         Self { lines: Vec::new() }
     }
 
-    /// Parses LRC content with multiple timestamps and karaoke tags.
+    /// Parses LRC content with multiple timestamps and karaoke tags, reusing scratch buffers
+    /// across lines to minimize intermediate heap allocations.
     /// Example: "[00:12.50]Hello world\n[00:15.00][01:20.00]Chorus <00:16.00>word"
     pub fn parse(content: &str) -> Self {
         let mut timed: Vec<LrcLine> = Vec::with_capacity(64);
+        let mut stamps: Vec<u64> = Vec::with_capacity(4);
+        let mut scratch = String::with_capacity(128);
 
         for line in content.lines() {
             let line = line.trim();
@@ -30,7 +33,7 @@ impl LrcTimeline {
 
             let bytes = line.as_bytes();
             let mut i = 0;
-            let mut stamps = Vec::with_capacity(4);
+            stamps.clear();
 
             // Parse one or more [mm:ss.xx] timestamps at the start of the line
             while i < bytes.len() && bytes[i] == b'[' {
@@ -59,16 +62,20 @@ impl LrcTimeline {
 
             // Remainder of line is the lyrics text. Strip inline word timestamps like <00:12.34>
             let raw_text = &line[i..];
-            let clean_text = strip_karaoke_tags(raw_text);
-            let trimmed = clean_text.trim();
+            let trimmed = if raw_text.as_bytes().contains(&b'<') {
+                strip_karaoke_tags_into(raw_text, &mut scratch);
+                scratch.trim()
+            } else {
+                raw_text.trim()
+            };
             if trimmed.is_empty() {
                 continue;
             }
 
-            for ms in stamps {
+            for &ms in &stamps {
                 timed.push(LrcLine {
                     time_ms: ms,
-                    text: trimmed.to_string(),
+                    text: trimmed.to_owned(),
                 });
             }
         }
@@ -145,9 +152,10 @@ fn parse_stamp_slice(slice: &[u8]) -> Option<u64> {
     Some(min * 60_000 + sec * 1_000 + frac_ms)
 }
 
-/// Strips word-level timing tags like `<00:12.34>` from text.
-fn strip_karaoke_tags(text: &str) -> String {
-    let mut result = String::with_capacity(text.len());
+/// Strips word-level timing tags like `<00:12.34>` into a reusable scratch buffer.
+fn strip_karaoke_tags_into(text: &str, out: &mut String) {
+    out.clear();
+    out.reserve(text.len());
     let mut inside = false;
 
     for ch in text.chars() {
@@ -156,11 +164,9 @@ fn strip_karaoke_tags(text: &str) -> String {
         } else if ch == '>' {
             inside = false;
         } else if !inside {
-            result.push(ch);
+            out.push(ch);
         }
     }
-
-    result
 }
 
 #[cfg(test)]
