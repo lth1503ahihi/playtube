@@ -25,9 +25,9 @@ jobs:
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: aarch64-linux-android
+          targets: aarch64-linux-android, armv7-linux-androideabi
 
-      - name: Build Rust DSP Core
+      - name: Build Rust Native Core (32-bit & 64-bit ARM)
         run: |
           cargo install cargo-ndk
           NDK_DIR=$(find ${ANDROID_HOME:-/usr/local/lib/android/sdk}/ndk -maxdepth 1 -mindepth 1 2>/dev/null | sort -V | tail -n 1)
@@ -35,44 +35,69 @@ jobs:
           export ANDROID_NDK_HOME="$NDK_DIR"
           mkdir -p mobile/src/stmobile/jniLibs
           cd native/playtube-core
-          cargo ndk --platform 24 -t arm64-v8a -o ../../mobile/src/stmobile/jniLibs build --release
+          cargo ndk --platform 21 -t arm64-v8a -t armeabi-v7a -o ../../mobile/src/stmobile/jniLibs build --release
           cd ../..
           ls -lh mobile/src/stmobile/jniLibs/arm64-v8a/
+          ls -lh mobile/src/stmobile/jniLibs/armeabi-v7a/
 
-      - name: Build PlayTube Debug
+      - name: Build PlayTube Debug (Splits & Universal)
         run: |
           chmod +x gradlew
           ./gradlew :mobile:assembleStmobileDebug
 
-      - name: Collect ARM64 APK
+      - name: Collect APKs (32-bit, 64-bit & Universal)
         run: |
           mkdir -p dist
           find mobile/build/outputs/ -name "*arm64-v8a*.apk" -exec cp {} dist/PlayTube_arm64-v8a.apk \;
-          APK_SIZE=$(stat -c%s dist/PlayTube_arm64-v8a.apk)
+          find mobile/build/outputs/ -name "*armeabi-v7a*.apk" -exec cp {} dist/PlayTube_armeabi-v7a.apk \;
+          find mobile/build/outputs/ -name "*universal*.apk" -exec cp {} dist/PlayTube_universal.apk \;
+          
           python3 -c "
-          import json
+          import json, os
+
           with open('playtube.json', 'r') as f:
               data = json.load(f)
-          data['package']['downloadSize_arm64-v8a'] = $APK_SIZE
-          data['package']['downloadSize'] = $APK_SIZE
-          data['package']['downloadUrlList_arm64-v8a'] = ['https://github.com/lth1503ahihi/playtube/releases/download/v1.0.${{ github.run_number }}/PlayTube_arm64-v8a.apk']
-          data['package']['downloadUrlList'] = ['https://github.com/lth1503ahihi/playtube/releases/download/v1.0.${{ github.run_number }}/PlayTube_arm64-v8a.apk']
+
+          tag = 'v1.0.${{ github.run_number }}'
+          base_url = f'https://github.com/lth1503ahihi/playtube/releases/download/{tag}'
+
+          # 64-bit ARM
+          if os.path.exists('dist/PlayTube_arm64-v8a.apk'):
+              s64 = os.path.getsize('dist/PlayTube_arm64-v8a.apk')
+              data['package']['downloadSize_arm64-v8a'] = s64
+              data['package']['downloadUrlList_arm64-v8a'] = [f'{base_url}/PlayTube_arm64-v8a.apk']
+
+          # 32-bit ARM
+          if os.path.exists('dist/PlayTube_armeabi-v7a.apk'):
+              s32 = os.path.getsize('dist/PlayTube_armeabi-v7a.apk')
+              data['package']['downloadSize_armeabi-v7a'] = s32
+              data['package']['downloadUrlList_armeabi-v7a'] = [f'{base_url}/PlayTube_armeabi-v7a.apk']
+
+          # Universal fallback
+          if os.path.exists('dist/PlayTube_universal.apk'):
+              su = os.path.getsize('dist/PlayTube_universal.apk')
+              data['package']['downloadSize'] = su
+              data['package']['downloadUrlList'] = [f'{base_url}/PlayTube_universal.apk']
+          elif os.path.exists('dist/PlayTube_arm64-v8a.apk'):
+              data['package']['downloadSize'] = s64
+              data['package']['downloadUrlList'] = [f'{base_url}/PlayTube_arm64-v8a.apk']
+
           with open('dist/playtube.json', 'w') as f:
               json.dump(data, f, indent=2, ensure_ascii=False)
           "
           ls -lh dist/
 
-      - name: Upload Artifact
+      - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: PlayTube-arm64
-          path: dist/PlayTube_arm64-v8a.apk
+          name: PlayTube-APKs
+          path: dist/
 
       - name: Publish to GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="v1.0.${{ github.run_number }}"
-          gh release create "$TAG" dist/PlayTube_arm64-v8a.apk dist/playtube.json \
+          gh release create "$TAG" dist/*.apk dist/playtube.json \
             --title "PlayTube $TAG" \
             --notes ""

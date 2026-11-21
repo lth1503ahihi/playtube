@@ -489,6 +489,25 @@ final class Lyrics {
 
     /** "[mm:ss.xx] words" lines, by time; a line under several stamps (a chorus) is at each of them. */
     static Lyrics parseLrc(String lrc, String title, String artist, String source) {
+        if (com.newtube.mobile.ui.meetune.PlayTuneNative.isLoaded()) {
+            try {
+                long handle = com.newtube.mobile.ui.meetune.PlayTuneNative.parseLrcTimeline(lrc);
+                if (handle != 0) {
+                    try {
+                        long[] times = com.newtube.mobile.ui.meetune.PlayTuneNative.getLrcTimestamps(handle);
+                        String[] linesArr = com.newtube.mobile.ui.meetune.PlayTuneNative.getLrcLines(handle);
+                        if (times != null && linesArr != null) {
+                            List<String> lines = new ArrayList<>(java.util.Arrays.asList(linesArr));
+                            return new Lyrics(title, artist, lines, times, source);
+                        }
+                    } finally {
+                        com.newtube.mobile.ui.meetune.PlayTuneNative.destroyLrcTimeline(handle);
+                    }
+                }
+            } catch (Throwable ignored) {
+                // Fallback to Java parser
+            }
+        }
         List<Map.Entry<Long, String>> timed = new ArrayList<>();
         for (String raw : lrc.split("\n")) {
             Matcher stamp = STAMP.matcher(raw);

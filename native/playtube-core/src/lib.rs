@@ -1,10 +1,12 @@
-use jni::objects::{JByteBuffer, JClass};
-use jni::sys::{jboolean, jfloat, jint, jlong, jstring, JNI_TRUE};
+use jni::objects::{JByteArray, JByteBuffer, JClass, JLongArray, JString};
+use jni::sys::{jboolean, jfloat, jint, jlong, jlongArray, jobjectArray, jstring, JNI_TRUE};
 use jni::JNIEnv;
 use std::f32::consts::PI;
 
 mod dsp;
 mod hrtf;
+pub mod lyrics;
+pub mod sponsorblock;
 
 const TAPS_L_MS: [f32; 4] = [8.3, 14.9, 22.1, 33.7];
 const TAPS_R_MS: [f32; 4] = [10.1, 17.3, 26.9, 38.9];
@@ -296,4 +298,189 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
     }
 
     byte_count
+}
+
+
+// ----------------------------------------------------------------------------- Lyrics JNI
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_parseLrcTimeline<'local>(
+    mut env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    lrc_string: JString<'local>,
+) -> jlong {
+    let lrc_rust: String = match env.get_string(&lrc_string) {
+        Ok(s) => s.into(),
+        Err(_) => return 0,
+    };
+
+    let timeline = Box::new(lyrics::LrcTimeline::parse(&lrc_rust));
+    Box::into_raw(timeline) as jlong
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_destroyLrcTimeline(
+    _env: JNIEnv,
+    _class: JClass,
+    handle: jlong,
+) {
+    if handle != 0 {
+        unsafe {
+            drop(Box::from_raw(handle as *mut lyrics::LrcTimeline));
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_findActiveLrcIndex(
+    _env: JNIEnv,
+    _class: JClass,
+    handle: jlong,
+    pos_ms: jlong,
+) -> jint {
+    if handle == 0 || pos_ms < 0 {
+        return -1;
+    }
+    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
+    timeline.find_active_index(pos_ms as u64)
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getLrcTimestamps<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    handle: jlong,
+) -> jlongArray {
+    if handle == 0 {
+        return std::ptr::null_mut();
+    }
+    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
+    let times: Vec<i64> = timeline.lines.iter().map(|l| l.time_ms as i64).collect();
+
+    match env.new_long_array(times.len() as i32) {
+        Ok(arr) => {
+            let _ = env.set_long_array_region(&arr, 0, &times);
+            arr.into_raw()
+        }
+        Err(_) => std::ptr::null_mut(),
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getLrcLines<'local>(
+    mut env: JNIEnv<'local>,
+    _class: JClass<'local>,
+    handle: jlong,
+) -> jobjectArray {
+    if handle == 0 {
+        return std::ptr::null_mut();
+    }
+    let timeline = unsafe { &*(handle as *const lyrics::LrcTimeline) };
+
+    let string_class = match env.find_class("java/lang/String") {
+        Ok(c) => c,
+        Err(_) => return std::ptr::null_mut(),
+    };
+
+    let empty_str = match env.new_string("") {
+        Ok(s) => s,
+        Err(_) => return std::ptr::null_mut(),
+    };
+
+    let arr = match env.new_object_array(timeline.lines.len() as i32, &string_class, &empty_str) {
+        Ok(a) => a,
+        Err(_) => return std::ptr::null_mut(),
+    };
+
+    for (i, line) in timeline.lines.iter().enumerate() {
+        if let Ok(js) = env.new_string(&line.text) {
+            let _ = env.set_object_array_element(&arr, i as i32, &js);
+        }
+    }
+
+    arr.into_raw()
+}
+
+// ----------------------------------------------------------------------- SponsorBlock JNI
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_createSponsorTimeline(
+    _env: JNIEnv,
+    _class: JClass,
+) -> jlong {
+    let timeline = Box::new(sponsorblock::SponsorTimeline::new());
+    Box::into_raw(timeline) as jlong
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_destroySponsorTimeline(
+    _env: JNIEnv,
+    _class: JClass,
+    handle: jlong,
+) {
+    if handle != 0 {
+        unsafe {
+            drop(Box::from_raw(handle as *mut sponsorblock::SponsorTimeline));
+        }
+    }
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_setSponsorSegments(
+    env: JNIEnv,
+    _class: JClass,
+    handle: jlong,
+    starts: JLongArray,
+    ends: JLongArray,
+    categories: JByteArray,
+    actions: JByteArray,
+) {
+    if handle == 0 {
+        return;
+    }
+
+    let len = match env.get_array_length(&starts) {
+        Ok(l) => l as usize,
+        Err(_) => return,
+    };
+
+    let mut start_vec = vec![0i64; len];
+    let mut end_vec = vec![0i64; len];
+    let mut cat_vec = vec![0i8; len];
+    let mut act_vec = vec![0i8; len];
+
+    let _ = env.get_long_array_region(&starts, 0, &mut start_vec);
+    let _ = env.get_long_array_region(&ends, 0, &mut end_vec);
+    let _ = env.get_byte_array_region(&categories, 0, &mut cat_vec);
+    let _ = env.get_byte_array_region(&actions, 0, &mut act_vec);
+
+    let mut segments = Vec::with_capacity(len);
+    for i in 0..len {
+        segments.push(sponsorblock::SponsorSegment {
+            start_ms: start_vec[i] as u64,
+            end_ms: end_vec[i] as u64,
+            category: cat_vec[i] as u8,
+            action: act_vec[i] as u8,
+        });
+    }
+
+    let timeline = unsafe { &mut *(handle as *mut sponsorblock::SponsorTimeline) };
+    timeline.set_segments(segments);
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_checkSponsorPosition(
+    _env: JNIEnv,
+    _class: JClass,
+    handle: jlong,
+    pos_ms: jlong,
+) -> jlong {
+    if handle == 0 || pos_ms < 0 {
+        return 0;
+    }
+    let timeline = unsafe { &*(handle as *const sponsorblock::SponsorTimeline) };
+    match timeline.check_position(pos_ms as u64) {
+        Some((target_ms, _cat, _act)) => target_ms as jlong,
+        None => 0,
+    }
 }
