@@ -83,17 +83,17 @@ Xem trọn vẹn kênh của nhà sáng tạo nội dung: video mới nhất, da
 </tr>
 <tr>
 <td width="25%"><img src=".github/assets/meetube/screens/search.jpg" alt="Tìm kiếm thông minh"></td>
-<td width="25%"><img src=".github/assets/meetube/screens/history.jpg" alt="Lịch sử xem"></td>
+<td width="25%"><img src=".github/assets/meetube/screens/subscriptions.jpg" alt="Kênh đăng ký"></td>
 <td width="50%">
 
-### Tìm kiếm giọng nói Song ngữ & Lịch sử tiện lợi
-Tìm kiếm thông minh với gợi ý nhanh, bộ lọc linh hoạt và hỗ trợ **Tìm kiếm giọng nói chuẩn Tiếng Việt (`vi-VN`) & Song ngữ (`en-US`)**. Quản lý lịch sử xem cục bộ, dễ dàng tìm lại video đã xem hoặc tiếp tục phát từ vị trí tạm dừng.
+### Tìm kiếm giọng nói Song ngữ & Kênh đăng ký
+Tìm kiếm thông minh với gợi ý nhanh, bộ lọc linh hoạt và hỗ trợ **Tìm kiếm giọng nói chuẩn Tiếng Việt (`vi-VN`) & Song ngữ (`en-US`)**. Quản lý danh sách kênh đăng ký trực quan, cập nhật video mới nhất từ các nhà sáng tạo yêu thích.
 
 </td>
 </tr>
 <tr>
-<td width="25%"><img src=".github/assets/meetube/screens/downloads.jpg" alt="Quản lý tải xuống"></td>
-<td width="25%"><img src=".github/assets/meetube/screens/settings.jpg" alt="Cài đặt đa dạng"></td>
+<td width="25%"><img src=".github/assets/meetube/downloads.jpg" alt="Quản lý tải xuống"></td>
+<td width="25%"><img src=".github/assets/meetube/screens/you.jpg" alt="Trang cá nhân & Tải xuống"></td>
 <td width="50%">
 
 ### Tải ngoại tuyến chất lượng cao & Tối ưu vượt trội
