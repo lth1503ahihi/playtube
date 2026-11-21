@@ -1911,24 +1911,35 @@ public class MobileBrowseActivity extends MobileActivity
                 || !getLifecycle().getCurrentState().isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
             return;
         }
-        // Three pages of nothing new: play what there is rather than spin forever (the YT client's
-        // last pass of its freshness filter does the same).
-        boolean anyShort = mShortsLaunchPages >= 3;
+        // PLAYTUBE: Instant Shorts launch - play fresh short if available, else immediately play the first available short
+        Video target = null;
         for (Video video : mCurrentVideos) {
-            if (isFreshShort(video) || (anyShort && video.belongsToShorts() && video.hasVideo())) {
-                mShortsLaunchPending = false;
-                mShortsLaunchPages = 0;
-                // The player covers the tab now (its window is translucent, so this one keeps
-                // drawing): a spinner left turning here redrew this window ~100 times a second
-                // under every short, GPU time taken from the player's own swipes.
-                View loading = findViewById(R.id.mobile_shorts_loading);
-                if (loading != null) {
-                    loading.setVisibility(View.GONE);
-                }
-                onVideoClicked(video);
-                overridePendingTransition(R.anim.shorts_open_enter, R.anim.mobile_stay); // fades up from the bottom
-                return;
+            if (isFreshShort(video)) {
+                target = video;
+                break;
             }
+        }
+        if (target == null) {
+            for (Video video : mCurrentVideos) {
+                if (video.belongsToShorts() && video.hasVideo()) {
+                    target = video;
+                    break;
+                }
+            }
+        }
+        if (target != null) {
+            mShortsLaunchPending = false;
+            mShortsLaunchPages = 0;
+            // The player covers the tab now (its window is translucent, so this one keeps
+            // drawing): a spinner left turning here redrew this window ~100 times a second
+            // under every short, GPU time taken from the player's own swipes.
+            View loading = findViewById(R.id.mobile_shorts_loading);
+            if (loading != null) {
+                loading.setVisibility(View.GONE);
+            }
+            onVideoClicked(target);
+            overridePendingTransition(R.anim.shorts_open_enter, R.anim.mobile_stay); // fades up from the bottom
+            return;
         }
         if (!mCurrentVideos.isEmpty() && mPresenter != null) {
             mShortsLaunchPages++;

@@ -74,13 +74,5 @@ jobs:
         run: |
           TAG="v1.0.${{ github.run_number }}"
           gh release create "$TAG" dist/PlayTube_arm64-v8a.apk dist/playtube.json \
-            --title "PlayTube $TAG (Sync MeeTube 3.5.8 Amber + AI Karaoke + Custom Update Stream)" \
-            --notes "Bản build PlayTube arm64-v8a đồng bộ phiên bản mới nhất:
-            - Đồng bộ lõi MeeTube 3.5.8 Amber: Tích hợp PlayTune AI Karaoke (tách lời bài hát trên máy với YkAI Model), PlayTuneMix chuyển bài thông minh, thu phóng video 8x mượt mà như YouTube, cải thiện luồng Live stream.
-            - Chuyển toàn bộ luồng cập nhật ứng dụng in-app updater sang repo GitHub chính chủ: lth1503ahihi/playtube.
-            - Hiệu ứng mở app kính mờ Frosted Glass đặc trưng của MeeTube.
-            - Tìm kiếm giọng nói chuẩn Tiếng Việt (vi-VN) & Song ngữ (vi-VN, en-US).
-            - Mặc định tần số quét 120Hz/90Hz, bộ đệm Cronet 64KB, ưu tiên giải mã phần cứng VP9/H.264.
-            - Tích hợp Rust Native DSP Core (ARM64 SIMD) BS2B Binaural Spatial Audio & Bass Exciter.
-            - Start Buffer 250ms & Preload 4s (chuyển bài 0ms).
-            - 100% Tiếng Việt tự nhiên chuẩn xác."
+            --title "PlayTube $TAG" \
+            --notes ""

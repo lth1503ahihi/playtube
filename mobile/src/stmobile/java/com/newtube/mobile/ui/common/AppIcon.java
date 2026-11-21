@@ -55,7 +55,7 @@ public final class AppIcon {
             R.mipmap.app_icon_play_dark, R.mipmap.app_icon_blaze, R.mipmap.app_icon_red_crt,
             R.mipmap.app_icon_chrome, R.mipmap.app_icon_pixel_play, R.mipmap.app_icon_starry_night,
             R.mipmap.app_icon_gta_vi};
-    private static final int[] MARKS = {R.drawable.ic_meetube_mark_default, R.drawable.ic_meetube_mark_classic,
+    private static final int[] MARKS = {R.drawable.ic_meetube_mark_play, R.drawable.ic_meetube_mark_classic,
             R.drawable.ic_meetube_mark_art, R.drawable.ic_meetube_mark_glass_heart, R.drawable.ic_meetube_mark_ruby,
             R.drawable.ic_meetube_mark_play, R.drawable.ic_meetube_mark_play_dark, R.drawable.ic_meetube_mark_blaze,
             R.mipmap.app_icon_red_crt, R.mipmap.app_icon_chrome, R.mipmap.app_icon_pixel_play,
