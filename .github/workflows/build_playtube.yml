@@ -48,6 +48,18 @@ jobs:
         run: |
           mkdir -p dist
           find mobile/build/outputs/ -name "*arm64-v8a*.apk" -exec cp {} dist/PlayTube_arm64-v8a.apk \;
+          APK_SIZE=$(stat -c%s dist/PlayTube_arm64-v8a.apk)
+          python3 -c "
+          import json
+          with open('playtube.json', 'r') as f:
+              data = json.load(f)
+          data['package']['downloadSize_arm64-v8a'] = $APK_SIZE
+          data['package']['downloadSize'] = $APK_SIZE
+          data['package']['downloadUrlList_arm64-v8a'] = ['https://github.com/lth1503ahihi/playtube/releases/download/v1.0.${{ github.run_number }}/PlayTube_arm64-v8a.apk']
+          data['package']['downloadUrlList'] = ['https://github.com/lth1503ahihi/playtube/releases/download/v1.0.${{ github.run_number }}/PlayTube_arm64-v8a.apk']
+          with open('dist/playtube.json', 'w') as f:
+              json.dump(data, f, indent=2, ensure_ascii=False)
+          "
           ls -lh dist/
 
       - name: Upload Artifact
@@ -61,15 +73,14 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="v1.0.${{ github.run_number }}"
-          gh release create "$TAG" dist/PlayTube_arm64-v8a.apk \
-            --title "PlayTube $TAG (MeeTube Frosted Glass Splash + Voice Search Tiếng Việt + 120Hz)" \
-            --notes "Bản build PlayTube arm64-v8a tối ưu toàn diện:
-            - MeeTube Frosted Glass Splash: Khôi phục hiệu ứng mở app chuyển kính mờ (Frosted Glass) đặc trưng, mượt mà và độc đáo của MeeTube.
-            - Hỗ trợ Tìm kiếm bằng giọng nói Tiếng Việt (vi-VN) chuẩn xác, nhận diện tự nhiên cả tiếng Việt và các từ khóa bài hát/ca sĩ tiếng Anh.
-            - Mặc định kích hoạt High Refresh Rate (90Hz / 120Hz) cho trải nghiệm lướt cực êm.
-            - Cronet Buffer tăng lên 64KB (gấp đôi tốc độ nạp dữ liệu stream video/audio).
-            - Ưu tiên phần cứng giải mã (Hardware VP9 & H264 codec priority) giúp thiết bị mát mẻ, tiết kiệm pin, phát video mượt mà.
-            - RecyclerView View Cache 16 items cho cuộn trang 120Hz siêu mượt (zero dropped frames).
-            - Tích hợp Rust Native DSP Core (ARM64 SIMD) BS2B Binaural Spatial Audio, Psychoacoustic Bass Exciter & Soft-Knee Peak Limiter.
-            - Tối ưu Start Buffer 250ms (giảm 50% TTFF) & Preload 4s video tiếp theo (0ms chuyển bài).
+          gh release create "$TAG" dist/PlayTube_arm64-v8a.apk dist/playtube.json \
+            --title "PlayTube $TAG (Sync MeeTube 3.5.8 Amber + AI Karaoke + Custom Update Stream)" \
+            --notes "Bản build PlayTube arm64-v8a đồng bộ phiên bản mới nhất:
+            - Đồng bộ lõi MeeTube 3.5.8 Amber: Tích hợp PlayTune AI Karaoke (tách lời bài hát trên máy với YkAI Model), PlayTuneMix chuyển bài thông minh, thu phóng video 8x mượt mà như YouTube, cải thiện luồng Live stream.
+            - Chuyển toàn bộ luồng cập nhật ứng dụng in-app updater sang repo GitHub chính chủ: lth1503ahihi/playtube.
+            - Hiệu ứng mở app kính mờ Frosted Glass đặc trưng của MeeTube.
+            - Tìm kiếm giọng nói chuẩn Tiếng Việt (vi-VN) & Song ngữ (vi-VN, en-US).
+            - Mặc định tần số quét 120Hz/90Hz, bộ đệm Cronet 64KB, ưu tiên giải mã phần cứng VP9/H.264.
+            - Tích hợp Rust Native DSP Core (ARM64 SIMD) BS2B Binaural Spatial Audio & Bass Exciter.
+            - Start Buffer 250ms & Preload 4s (chuyển bài 0ms).
             - 100% Tiếng Việt tự nhiên chuẩn xác."

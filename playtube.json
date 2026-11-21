@@ -1,0 +1,24 @@
+{
+  "package": {
+    "downloadUrlList_arm64-v8a": [
+      "https://github.com/lth1503ahihi/playtube/releases/download/v1.0.20/PlayTube_arm64-v8a.apk"
+    ],
+    "downloadSize_arm64-v8a": 49206829,
+    "downloadUrlList": [
+      "https://github.com/lth1503ahihi/playtube/releases/download/v1.0.20/PlayTube_arm64-v8a.apk"
+    ],
+    "downloadSize": 49206829
+  },
+  "3.5.8": {
+    "versionCode": 30508,
+    "changelog": [
+      "Đồng bộ phiên bản mới nhất MeeTube 3.5.8 Amber",
+      "PlayTune AI Karaoke: tách lời bài hát trực tiếp trên điện thoại bằng mô hình YkAI",
+      "PlayTuneMix: chuyển bài hòa âm thông minh mượt mà không ngắt quãng",
+      "Thu phóng video linh hoạt bằng hai ngón tay lên đến 8x như ứng dụng YouTube",
+      "Thanh bình luận nổi trên nền kính mờ, lướt cuộn mượt mà",
+      "Tích hợp Rust Native DSP Core BS2B Spatial Audio & Tối ưu tốc độ tải video",
+      "Chuyển luồng cập nhật ứng dụng trực tiếp từ GitHub lth1503ahihi/playtube"
+    ]
+  }
+}

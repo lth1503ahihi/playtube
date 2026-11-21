@@ -645,4 +645,35 @@
     <string name="mobile_shorts_clean_off">Đã hiện lại các nút. Nhấn và giữ để ẩn</string>
     <string name="mobile_shorts_clean_tip">Mẹo: Nhấn và giữ màn hình Shorts để ẩn các nút điều khiển</string>
     <string name="mobile_player_most_replayed">Được phát lại nhiều nhất</string>
+    <!-- PLAYTUBE(greeting): danh ngôn truyền cảm hứng dưới lời chào mỗi khi mở ứng dụng -->
+    <string-array name="mobile_greet_quotes">
+        <item>“Bí quyết để tiến lên phía trước là hãy bắt đầu.”\nMark Twain</item>
+        <item>“Làm tốt thì tốt hơn nói hay.”\nBenjamin Franklin</item>
+        <item>“Bạn đi chậm thế nào không quan trọng, miễn là đừng dừng lại.”\nKhổng Tử</item>
+        <item>“Hành trình vạn dặm bắt đầu từ một bước chân.”\nLão Tử</item>
+        <item>“Đơn giản chính là đỉnh cao của sự tinh tế.”\nLeonardo da Vinci</item>
+        <item>“Hãy là chính mình; những người khác đều đã có người làm rồi.”\nOscar Wilde</item>
+        <item>“Dù bạn là ai, hãy là một người xuất sắc.”\nAbraham Lincoln</item>
+        <item>“Giữa muôn vàn khó khăn luôn ẩn chứa cơ hội.”\nAlbert Einstein</item>
+        <item>“Thấu hiểu chính mình là khởi đầu của mọi trí tuệ.”\nAristotle</item>
+        <item>“Hạnh phúc tùy thuộc vào chính chúng ta.”\nAristotle</item>
+        <item>“Con đường tốt nhất để vượt qua là luôn đi xuyên qua nó.”\nRobert Frost</item>
+        <item>“Không có gì tự thành nếu bạn không hành động.”\nMaya Angelou</item>
+        <item>“Hãy cứ khát khao, hãy cứ dại khờ.”\nSteve Jobs</item>
+        <item>“Cuộc sống là những gì xảy ra khi bạn đang bận rộn lập những kế hoạch khác.”\nJohn Lennon</item>
+        <item>“Hãy hành động như thể những gì bạn làm tạo ra sự khác biệt. Quả thực là vậy.”\nWilliam James</item>
+        <item>“Hãy đắm mình trong vẻ đẹp của cuộc sống.”\nMarcus Aurelius</item>
+        <item>“Đừng lãng phí thời gian tranh cãi thế nào là người tốt. Hãy là một người như vậy.”\nMarcus Aurelius</item>
+        <item>“May mắn là khi sự chuẩn bị gặp gỡ thời cơ.”\nSeneca</item>
+        <item>“Trong khi ta chờ đợi cuộc sống, cuộc đời đã trôi qua.”\nSeneca</item>
+        <item>“Bạn sẽ bỏ lỡ 100% cơ hội nếu bạn không bao giờ thử.”\nWayne Gretzky</item>
+        <item>“Hãy biến những vết thương của bạn thành trí tuệ.”\nOprah Winfrey</item>
+        <item>“Không phải ai phiêu bạt cũng đều là người lạc lối.”\nJ. R. R. Tolkien</item>
+        <item>“Cách duy nhất để làm nên điều vĩ đại là yêu việc bạn làm.”\nSteve Jobs</item>
+        <item>“Từng chút một, ta sẽ đi được rất xa.”\nJ. R. R. Tolkien</item>
+        <item>“Nếu bạn đang đi qua địa ngục, hãy cứ tiếp tục tiến bước.”\nWinston Churchill</item>
+        <item>“Hãy làm những gì bạn có thể, với những gì bạn có, tại nơi bạn đang đứng.”\nTheodore Roosevelt</item>
+        <item>“Tâm ta nghĩ gì, ta sẽ trở thành như thế.”\nĐức Phật</item>
+        <item>“Mỗi khoảnh khắc đều là một khởi đầu mới.”\nT. S. Eliot</item>
+    </string-array>
 </resources>
