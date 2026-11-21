@@ -1162,6 +1162,7 @@ public class MobileMainApplication extends MainApplication {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
+        com.newtube.mobile.ui.common.PlayTubeDiagnostics.handleTrimMemory(this, level);
 
         // MEETUBE(app icon): a new launcher icon is applied once nothing of the app is on screen;
         // not while a player plays on in the background (the alias switch closes its task).

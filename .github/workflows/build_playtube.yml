@@ -43,7 +43,7 @@ jobs:
       - name: Build PlayTube Debug (Splits & Universal)
         run: |
           chmod +x gradlew
-          ./gradlew :mobile:assembleStmobileDebug
+          ./gradlew :mobile:assembleStmobileDebug -PexcludeFixture=true
 
       - name: Collect APKs (32-bit, 64-bit & Universal)
         run: |

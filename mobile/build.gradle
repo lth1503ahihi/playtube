@@ -282,6 +282,9 @@ android {
     // AppCompat, media3) carry ~80 more, whose strings would sit next to English app text anyway.
     // A new translation adds its locale here.
     androidResources {
+        if (project.hasProperty('excludeFixture')) {
+            ignoreAssetsPattern = 'ttff-fixture.mp4'
+        }
         localeFilters += ['en', 'ar', 'az', 'bg', 'ca', 'cs', 'da', 'de', 'el', 'es', 'et', 'fa-rIR',
                 'fi', 'fr', 'gl-rES', 'he', 'hi', 'hr', 'hu', 'hy', 'in', 'it', 'iw', 'ja', 'ko', 'lt',
                 'lv', 'mo', 'nb', 'nl', 'pl', 'pt', 'pt-rBR', 'pt-rPT', 'ro', 'ru', 'sk', 'sl', 'sq',

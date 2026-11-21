@@ -3,7 +3,7 @@ use jni::sys::{jboolean, jfloat, jint, jlong, jlongArray, jobjectArray, jstring,
 use jni::JNIEnv;
 use std::collections::HashMap;
 use std::f32::consts::PI;
-use std::sync::atomic::{AtomicI64, Ordering};
+use std::sync::atomic::{AtomicI64, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex, OnceLock, RwLock};
 
 mod dsp;
@@ -12,6 +12,8 @@ pub mod lyrics;
 pub mod sponsorblock;
 
 static NEXT_HANDLE: AtomicI64 = AtomicI64::new(1);
+static PCM_FRAMES_PROCESSED: AtomicU64 = AtomicU64::new(0);
+static JNI_ERRORS: AtomicU64 = AtomicU64::new(0);
 
 fn next_handle_id() -> jlong {
     NEXT_HANDLE.fetch_add(1, Ordering::Relaxed)
@@ -393,13 +395,20 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
 
     let in_cap = match env.get_direct_buffer_capacity(&input_buf) {
         Ok(c) => c,
-        Err(_) => return -1,
+        Err(_) => {
+            JNI_ERRORS.fetch_add(1, Ordering::Relaxed);
+            return -1;
+        }
     };
     let out_cap = match env.get_direct_buffer_capacity(&output_buf) {
         Ok(c) => c,
-        Err(_) => return -1,
+        Err(_) => {
+            JNI_ERRORS.fetch_add(1, Ordering::Relaxed);
+            return -1;
+        }
     };
     if in_cap < usable_bytes || out_cap < usable_bytes {
+        JNI_ERRORS.fetch_add(1, Ordering::Relaxed);
         return -1;
     }
 
@@ -408,7 +417,10 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
         env.get_direct_buffer_address(&output_buf),
     ) {
         (Ok(inp), Ok(outp)) => (inp, outp),
-        _ => return -1,
+        _ => {
+            JNI_ERRORS.fetch_add(1, Ordering::Relaxed);
+            return -1;
+        }
     };
 
     let engine_arc = spatial_registry()
@@ -417,11 +429,15 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
         .and_then(|map| map.get(&handle).cloned());
     let arc = match engine_arc {
         Some(a) => a,
-        None => return -1,
+        None => {
+            JNI_ERRORS.fetch_add(1, Ordering::Relaxed);
+            return -1;
+        }
     };
-    let mut engine = match arc.lock() {
+    // Non-blocking try_lock on realtime audio path so audio callback never stalls
+    let mut engine = match arc.try_lock() {
         Ok(g) => g,
-        Err(_) => return -1,
+        Err(_) => return 0,
     };
 
     let num_frames = usable_bytes / 4;
@@ -446,7 +462,29 @@ pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_process
         }
     }
 
+    PCM_FRAMES_PROCESSED.fetch_add(num_frames as u64, Ordering::Relaxed);
     usable_bytes as jint
+}
+
+#[no_mangle]
+pub extern "system" fn Java_com_newtube_mobile_ui_meetune_PlayTuneNative_getNativeStats<'local>(
+    env: JNIEnv<'local>,
+    _class: JClass<'local>,
+) -> jlongArray {
+    let spatial = spatial_registry().lock().map(|m| m.len() as i64).unwrap_or(0);
+    let lyrics = lyrics_registry().lock().map(|m| m.len() as i64).unwrap_or(0);
+    let sponsor = sponsor_registry().lock().map(|m| m.len() as i64).unwrap_or(0);
+    let frames = PCM_FRAMES_PROCESSED.load(Ordering::Relaxed) as i64;
+    let errors = JNI_ERRORS.load(Ordering::Relaxed) as i64;
+    let stats = [spatial, lyrics, sponsor, frames, errors];
+
+    match env.new_long_array(stats.len() as i32) {
+        Ok(arr) => {
+            let _ = env.set_long_array_region(&arr, 0, &stats);
+            arr.into_raw()
+        }
+        Err(_) => std::ptr::null_mut(),
+    }
 }
 
 
@@ -725,5 +763,68 @@ mod tests {
         let got = dot_product_f32(&a, &b);
         let expected: f32 = a.iter().zip(b.iter()).map(|(x, y)| x * y).sum();
         assert!((got - expected).abs() < 1e-5);
+    }
+
+    #[test]
+    fn benchmark_rust_core_latency() {
+        use std::time::Instant;
+
+        // 1. Spatial DSP benchmark: 1000 buffers x 1024 stereo frames (~21.3ms audio per buffer at 48kHz)
+        let mut engine = SpatialEngine::new(48000);
+        let mut sink = 0.0f32;
+        let t_dsp = Instant::now();
+        for _ in 0..1000 {
+            for i in 0..1024 {
+                let s = ((i as f32) * 0.01).sin() * 0.5;
+                let (l, r) = engine.process_frame(s, -s, 0.8, 0.5);
+                sink += l + r;
+            }
+        }
+        let dsp_us_per_buf = t_dsp.elapsed().as_secs_f64() * 1_000_000.0 / 1000.0;
+
+        // 2. Lyrics parse + lookup benchmark (100-line LRC)
+        let mut lrc = String::with_capacity(4096);
+        for i in 0..100 {
+            lrc.push_str(&format!("[{:02}:{:02}.00]Line {} <00:00.50>word\n", i / 60, i % 60, i));
+        }
+        let t_lrc = Instant::now();
+        let mut timeline = lyrics::LrcTimeline::new();
+        for _ in 0..500 {
+            timeline = lyrics::LrcTimeline::parse(&lrc);
+        }
+        let lrc_parse_us = t_lrc.elapsed().as_secs_f64() * 1_000_000.0 / 500.0;
+
+        let t_lookup = Instant::now();
+        let mut idx_sum = 0i64;
+        for i in 0..10_000u64 {
+            idx_sum += timeline.find_active_index((i % 100) * 1000 + 500) as i64;
+        }
+        let lrc_lookup_ns = t_lookup.elapsed().as_secs_f64() * 1_000_000_000.0 / 10_000.0;
+
+        // 3. SponsorBlock lookup benchmark (32 segments)
+        let mut sb = sponsorblock::SponsorTimeline::new();
+        let segs: Vec<_> = (0..32u64)
+            .map(|i| sponsorblock::SponsorSegment {
+                start_ms: i * 10_000,
+                end_ms: i * 10_000 + 5_000,
+                category: (i % 4) as u8,
+                action: 1,
+            })
+            .collect();
+        sb.set_segments(segs);
+        let t_sb = Instant::now();
+        let mut sb_hits = 0u64;
+        for i in 0..10_000u64 {
+            if sb.check_position((i % 320) * 1000 + 2500).is_some() {
+                sb_hits += 1;
+            }
+        }
+        let sb_lookup_ns = t_sb.elapsed().as_secs_f64() * 1_000_000_000.0 / 10_000.0;
+
+        assert!(sink.is_finite() && idx_sum >= 0 && sb_hits > 0);
+        println!(
+            "[PlayTube Rust Benchmark] DSP(1024f)={:.2}us/buf | LRC_parse(100L)={:.2}us | LRC_lookup={:.1}ns | SB_lookup(32seg)={:.1}ns",
+            dsp_us_per_buf, lrc_parse_us, lrc_lookup_ns, sb_lookup_ns
+        );
     }
 }

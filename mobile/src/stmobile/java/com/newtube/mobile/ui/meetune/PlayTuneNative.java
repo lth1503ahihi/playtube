@@ -52,4 +52,7 @@ public final class PlayTuneNative {
     public static native void destroySponsorTimeline(long handle);
     public static native void setSponsorSegments(long handle, long[] starts, long[] ends, byte[] categories, byte[] actions);
     public static native long checkSponsorPosition(long handle, long posMs);
+
+    // Native Telemetry: [activeSpatial, activeLyrics, activeSponsor, pcmFramesProcessed, jniErrors]
+    public static native long[] getNativeStats();
 }
