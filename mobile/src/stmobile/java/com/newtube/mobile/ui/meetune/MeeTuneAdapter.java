@@ -383,9 +383,10 @@ final class MeeTuneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 if (grid != list.getLayoutManager() instanceof androidx.recyclerview.widget.GridLayoutManager) {
                     list.setLayoutManager(grid ? new androidx.recyclerview.widget.GridLayoutManager(view.getContext(), 3)
                             : new LinearLayoutManager(view.getContext(), RecyclerView.HORIZONTAL, false));
-                    int side = dp(view.getContext(), grid ? 15 : 20); // a grid cell's 5dp margins make it 20
-                    list.setPadding(side, 0, side, 0);
                 }
+                // a grid cell's 5dp margins make it 20; a column's songs bring 10dp of their own (room for the press pill)
+                int side = dp(view.getContext(), grid ? 15 : row.style == COLUMNS ? 10 : 20);
+                list.setPadding(side, 0, side, 0);
                 boolean dial = row.shelf.dial && MeeTune.speedDial(view.getContext());
                 CoverGlow.attach(list);
                 list.setAdapter(new Carousel(row, dial));
@@ -667,11 +668,11 @@ final class MeeTuneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             } else if (mRow.style == COLUMNS) {
                 LinearLayout column = new LinearLayout(parent.getContext());
                 column.setOrientation(LinearLayout.VERTICAL);
-                int width = parent.getResources().getDisplayMetrics().widthPixels - dp(parent.getContext(), 56);
+                int width = parent.getResources().getDisplayMetrics().widthPixels - dp(parent.getContext(), 46);
                 column.setLayoutParams(new RecyclerView.LayoutParams(width, ViewGroup.LayoutParams.WRAP_CONTENT));
                 for (int i = 0; i < 4; i++) {
                     View song = inflater.inflate(R.layout.meetune_song_row, column, false);
-                    song.setPadding(0, 0, 0, 0);
+                    song.setPadding(dp(parent.getContext(), 10), 0, 0, 0); // the pill (6dp in) wraps the cover
                     column.addView(song);
                 }
                 view = column;
@@ -715,20 +716,7 @@ final class MeeTuneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         Motion.pop(v);
                         mHost.open(item, mItems);
                     });
-                    if (item.playable()) {
-                        tile.setOnLongClickListener(v -> {
-                            mHost.songMenu(v, item);
-                            return true;
-                        });
-                    } else if (MeeTuneLibrary.isPlaylist(item.browseId)
-                            || MeeTuneLibrary.isSaved(tile.getContext(), item.browseId)) {
-                        tile.setOnLongClickListener(v -> {
-                            mHost.cardMenu(v, item);
-                            return true;
-                        });
-                    } else {
-                        tile.setOnLongClickListener(null);
-                    }
+                    bindLongPress(tile, item);
                 }
                 return;
             }
@@ -763,6 +751,26 @@ final class MeeTuneAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 Motion.pop(v);
                 mHost.open(item, mItems);
             });
+            bindLongPress(view, item); // the Library's grid cards: Pin, Rename, Delete
+        }
+
+        /** A song's long press opens its menu; a phone playlist or saved card's opens Pin, Rename, Delete. */
+        private void bindLongPress(View view, MusicApi.Item item) {
+            if (item.playable()) {
+                view.setOnLongClickListener(v -> {
+                    mHost.songMenu(v, item);
+                    return true;
+                });
+            } else if (MeeTuneLibrary.isPlaylist(item.browseId)
+                    || MeeTuneLibrary.isSaved(view.getContext(), item.browseId)
+                    || (item.browseId != null && item.browseId.startsWith("VLPL") && MusicApi.signedIn(view.getContext()))) {
+                view.setOnLongClickListener(v -> { // an account playlist: the host opens it in the Library only
+                    mHost.cardMenu(v, item);
+                    return true;
+                });
+            } else {
+                view.setOnLongClickListener(null);
+            }
         }
         /** An Explore card's front cover and the two behind it: its first three songs' covers. */
         private void bindStack(View view, MusicApi.Item item, int color) {

@@ -4229,6 +4229,7 @@ public class MobilePlaybackActivity extends MobileActivity
                         R.string.mobile_player_sleep_timer, this::showSleepTimerSheet),
                 new com.newtube.mobile.ui.meetune.MeeTuneSongMenu.Row(R.drawable.ic_player_speed,
                         R.string.mobile_player_speed, this::showSpeedSheet),
+                com.newtube.mobile.ui.meetune.MeeTuneSongMenu.karaoke(this),
                 new com.newtube.mobile.ui.meetune.MeeTuneSongMenu.Row(R.drawable.ic_meetune_video, R.string.meetune_canvas,
                         () -> com.newtube.mobile.ui.meetune.MeeTuneSongMenu.canvas(this, video, mMeeTune.canvasIsLoop(),
                                 () -> mMeeTune.reloadCanvas(video))),
@@ -5932,6 +5933,7 @@ public class MobilePlaybackActivity extends MobileActivity
             mAmbient = new AmbientGlow(mWatchContent, mVideoTexture,
                     androidx.core.content.ContextCompat.getColor(this, R.color.mobile_color_background));
             mAmbient.setBar(findViewById(android.R.id.content)); // the status bar glows too
+            mAmbient.setSurface(mHdrOutput && !mHdrSwapPending ? mHdrSurface : null);
         } else if (!ambient && mAmbient != null) {
             mAmbient.stop();
             mAmbient.setFill(null);
@@ -6910,6 +6912,9 @@ public class MobilePlaybackActivity extends MobileActivity
         if (!mHdrOutput && mHdrSurface != null) {
             mHdrSurface.setVisibility(View.GONE);
             setVideoGlassSampling(true);
+        }
+        if (mAmbient != null) {
+            mAmbient.setSurface(mHdrOutput ? mHdrSurface : null); // MEETUBE(ambient): glow from where the frames are
         }
     }
 
@@ -11433,6 +11438,7 @@ public class MobilePlaybackActivity extends MobileActivity
             }
             // MEETUBE(shorts): as the comments slide the short grows or shrinks with them.
             followShortsComments(gone);
+            liftWatchFab(1f - gone);
         }
 
         @Override
@@ -11458,8 +11464,20 @@ public class MobilePlaybackActivity extends MobileActivity
             }
             // The page under the panel is covered: keep TalkBack off it (the video stays reachable).
             updateSidePanelsShown(shown);
+            liftWatchFab(shown ? 1f : 0f);
         }
     };
+
+    /**
+     * MEETUBE: the fullscreen button floats over the open comments panel; it rises with the panel
+     * so it sits above the "Add a comment…" bar fixed at the panel's bottom, not on it.
+     */
+    private void liftWatchFab(float shown) {
+        View bar = findViewById(R.id.comments_compose_bar);
+        if (mWatchFab != null && bar != null) {
+            mWatchFab.setTranslationY(-bar.getHeight() * shown);
+        }
+    }
 
     private void onChatEntryClicked() {
         // If the reused ChatController already pushed a receiver (live chat auto-enabled in settings),
@@ -12126,7 +12144,7 @@ public class MobilePlaybackActivity extends MobileActivity
             mCommentsPanel.closeImmediately();
         }
         closeSidePanelsImmediately();
-        com.newtube.mobile.ui.common.SheetGlass.frost(panel.getSheet(), getWindow());
+        com.newtube.mobile.ui.common.SheetGlass.frostDocked(panel.getSheet(), getWindow());
         return true;
     }
 
@@ -13462,9 +13480,10 @@ public class MobilePlaybackActivity extends MobileActivity
     @Override
     public void setResizeMode(int mode) {
         if (isShortsMode()) {
-            if (ShortsOverlay.fillsScreen(this) && mVideoAspect < SHORTS_FILL_MAX_ASPECT) {
-                mode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM; // shorts fill a phone
-            } else if (ShortsOverlay.fillsScreen(this)) {
+            // A tall short upright follows the zoom setting (whole by default, a pinch or the Zoom
+            // dialog fills): forcing zoom cut a 9:16 short's sides on a taller phone and made the
+            // setting do nothing.
+            if (ShortsOverlay.fillsScreen(this) && mVideoAspect >= SHORTS_FILL_MAX_ASPECT) {
                 // A square or wide "short" zoomed to the screen kept a strip of its middle: whole,
                 // like YouTube, with the ambient glow in the bands.
                 mode = androidx.media3.ui.AspectRatioFrameLayout.RESIZE_MODE_FIT;
@@ -13488,9 +13507,8 @@ public class MobilePlaybackActivity extends MobileActivity
     }
 
     /**
-     * A short this narrow or narrower (width / height) fills a phone. 9:16 is 0.56, 3:4 is 0.75: a
-     * tall short loses a sliver of its sides, a 4:5, square or wide one would lose most of itself.
-     * 0 (size not known yet) fills, as every short did.
+     * A short wider than this (width / height) always shows whole upright, even on "fill": a 4:5,
+     * square or wide one would lose most of itself. 9:16 is 0.56, 3:4 is 0.75.
      */
     private static final float SHORTS_FILL_MAX_ASPECT = 0.7f;
 
