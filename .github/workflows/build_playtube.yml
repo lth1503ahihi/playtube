@@ -40,10 +40,25 @@ jobs:
           ls -lh mobile/src/stmobile/jniLibs/arm64-v8a/
           ls -lh mobile/src/stmobile/jniLibs/armeabi-v7a/
 
-      - name: Build PlayTube Debug (Splits & Universal)
+      - name: Configure Permanent Signing Keystore
+        env:
+          PLAYTUBE_KEYSTORE_B64: ${{ secrets.PLAYTUBE_KEYSTORE_B64 }}
+          PLAYTUBE_STORE_PASS: ${{ secrets.PLAYTUBE_STORE_PASS }}
+          PLAYTUBE_KEY_ALIAS: ${{ secrets.PLAYTUBE_KEY_ALIAS }}
+          PLAYTUBE_KEY_PASS: ${{ secrets.PLAYTUBE_KEY_PASS }}
+        run: |
+          echo "$PLAYTUBE_KEYSTORE_B64" | base64 -d > playtube-release.jks
+          cat <<EOF > keystore.properties
+          storeFile=../playtube-release.jks
+          storePassword=$PLAYTUBE_STORE_PASS
+          keyAlias=$PLAYTUBE_KEY_ALIAS
+          keyPassword=$PLAYTUBE_KEY_PASS
+          EOF
+
+      - name: Build PlayTube Release (Splits & Universal)
         run: |
           chmod +x gradlew
-          ./gradlew :mobile:assembleStmobileDebug -PexcludeFixture=true
+          ./gradlew :mobile:assembleStmobileRelease -PexcludeFixture=true
 
       - name: Collect APKs (32-bit, 64-bit & Universal)
         run: |
